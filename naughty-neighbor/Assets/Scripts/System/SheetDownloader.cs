@@ -86,6 +86,12 @@ public class SheetDownloader : MonoBehaviour
                 case 11:
                     gameData.TimeToWarning = ParseInt(cells[7]);
                     break;
+                case 12:
+                    gameData.MinDistance = ParseFloat(cells[1]);
+                    break;
+                case 13:
+                    gameData.MaxDistance = ParseFloat(cells[1]);
+                    break;
             }
         }
         return gameData;
@@ -102,13 +108,26 @@ public class SheetDownloader : MonoBehaviour
         return result;
     }
 
+    float ParseFloat(string s)
+    {
+        float result = -1;
+        if (!float.TryParse(s, System.Globalization.NumberStyles.Float,
+            System.Globalization.CultureInfo.GetCultureInfo("en-US"), out result))
+        {
+            Debug.Log("Can't parse float , wrong text.");
+        }
+        return result;
+    }
+
 }
 
 [Serializable]
 public class GameData
 {
+    [Header("===== Player =====")]
     public int PlayerHP;
 
+    [Header("===== Enemy =====")]
     public int EnemyHP_Easy;
     public int EnemyMissedRate_Easy;
     public int EnemyTargetHPToHeal_Easy;
@@ -124,15 +143,23 @@ public class GameData
     public int EnemyTargetHPToHeal_Hard;
     public int EnemySmallShotRate_Hard;
 
+    [Header("===== Attack =====")]
     public int NormalAttack;
     public int SmallAttack;
 
+    [Header("===== Item =====")]
     public int PowerThrow;
     public int DoubleAttackAmount;
     public int DoubleAttack;
     public int Heal;
 
+    [Header("===== Time =====")]
     public int TimeToThink;
     public int TimeToWarning;
+
+    [Header("===== Distance =====")]
+    public float MinDistance;
+    public float MaxDistance;
+
 }
 
