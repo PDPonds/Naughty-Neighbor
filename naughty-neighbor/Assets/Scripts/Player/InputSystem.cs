@@ -23,16 +23,14 @@ public class InputSystem : MonoBehaviour
     private void StartHold()
     {
         PlayerManager player = GameManager.Instance.GetCurPlayerManager();
-        Debug.Log("Start Touch");
         player.isHold = true;
-
     }
 
     private void StopHold()
     {
         PlayerManager player = GameManager.Instance.GetCurPlayerManager();
         player.isHold = false;
-        Debug.Log(player.curDis);
+        // Fire Bullet
         player.curDis = 0;
     }
 

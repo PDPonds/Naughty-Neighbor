@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    [Header("===== HP =====")]
-    int curHP;
+    [HideInInspector] public int curHP;
 
     [Header("===== Attack =====")]
+    [SerializeField] GameObject normalBulletPrefab;
+    [HideInInspector] public GameObject curBullet;
     [HideInInspector] public float curDis;
     [HideInInspector] public bool isHold;
-    [SerializeField] GameObject normalBulletPrefab;
 
     [Header("===== Item =====")]
     [SerializeField] bool isDoubleAttack;
+    [SerializeField] GameObject powerThrowBullet;
 
     private void Start()
     {
@@ -33,6 +34,7 @@ public class PlayerManager : MonoBehaviour
     void SetupHP()
     {
         curHP = GameManager.gameData.PlayerHP;
+        UpdateHPInfo();
     }
 
     public void TakeDamage(int amount)
@@ -42,6 +44,7 @@ public class PlayerManager : MonoBehaviour
         {
             Die();
         }
+        UpdateHPInfo();
     }
 
     void Die()
@@ -56,6 +59,13 @@ public class PlayerManager : MonoBehaviour
         {
             curHP = GameManager.gameData.PlayerHP;
         }
+        UpdateHPInfo();
+    }
+
+    void UpdateHPInfo()
+    {
+        GameUIManager.Instance.UpdateAuntNextDoorHP();
+        if (GameManager.IsGameMode(GameMode.MultiPlayer)) GameUIManager.Instance.UpdateRichPigHP();
     }
 
     #endregion
