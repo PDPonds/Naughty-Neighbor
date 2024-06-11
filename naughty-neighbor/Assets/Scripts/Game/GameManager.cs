@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum GameMode { SinglePlayer, MultiPlayer }
 public enum GameDifficulty { Easy, Normal, Hard }
-public enum GameState { RichPig, AuntNextDoor }
+public enum GameState { RichPig, AuntNextDoor, Winner }
 
 public class GameManager : Singleton<GameManager>
 {
@@ -111,6 +111,8 @@ public class GameManager : Singleton<GameManager>
                 }
 
                 break;
+            case GameState.Winner:
+                break;
         }
     }
 
@@ -123,6 +125,28 @@ public class GameManager : Singleton<GameManager>
     {
         PlayerManager player2 = go.GetComponent<PlayerManager>();
         player2.enabled = enable;
+    }
+
+    public PlayerManager GetCurPlayerManager()
+    {
+        if (IsGameMode(GameMode.MultiPlayer))
+        {
+            if (IsGameState(GameState.AuntNextDoor))
+            {
+                PlayerManager player1 = AuntNextDoor.GetComponent<PlayerManager>();
+                return player1 != null ? player1 : null;
+            }
+            else
+            {
+                PlayerManager player2 = RichPig.GetComponent<PlayerManager>();
+                return player2 != null ? player2 : null;
+            }
+        }
+        else
+        {
+            PlayerManager player1 = AuntNextDoor.GetComponent<PlayerManager>();
+            return player1 != null ? player1 : null;
+        }
     }
 
     #endregion

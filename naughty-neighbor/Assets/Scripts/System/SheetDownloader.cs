@@ -92,6 +92,9 @@ public class SheetDownloader : MonoBehaviour
                 case 13:
                     gameData.MaxDistance = ParseFloat(cells[1]);
                     break;
+                case 14:
+                    gameData.HoldMultiply = ParseInt(cells[1]);
+                    break;
             }
         }
         return gameData;
@@ -160,6 +163,7 @@ public class GameData
     [Header("===== Distance =====")]
     public float MinDistance;
     public float MaxDistance;
+    public float HoldMultiply;
 
 }
 
