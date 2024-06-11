@@ -107,25 +107,29 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
 
     void SelectMultiPlayer()
     {
-        GameManager.Instance.SwitchGameMode(GameMode.MultiPlayer);
+        GameManager.SwitchGameMode(GameMode.MultiPlayer);
+        SceneManager.LoadScene(1);
     }
 
     void SelectEasyMode()
     {
-        GameManager.Instance.SwitchGameMode(GameMode.SinglePlayer);
-        GameManager.Instance.SwitchGameDifficulty(GameDifficulty.Easy);
+        GameManager.SwitchGameMode(GameMode.SinglePlayer);
+        GameManager.SwitchGameDifficulty(GameDifficulty.Easy);
+        SceneManager.LoadScene(1);
     }
 
     void SelectNormalMode()
     {
-        GameManager.Instance.SwitchGameMode(GameMode.SinglePlayer);
-        GameManager.Instance.SwitchGameDifficulty(GameDifficulty.Normal);
+        GameManager.SwitchGameMode(GameMode.SinglePlayer);
+        GameManager.SwitchGameDifficulty(GameDifficulty.Normal);
+        SceneManager.LoadScene(1);
     }
 
     void SelectHardMode()
     {
-        GameManager.Instance.SwitchGameMode(GameMode.SinglePlayer);
-        GameManager.Instance.SwitchGameDifficulty(GameDifficulty.Hard);
+        GameManager.SwitchGameMode(GameMode.SinglePlayer);
+        GameManager.SwitchGameDifficulty(GameDifficulty.Hard);
+        SceneManager.LoadScene(1);
     }
 
     void CloseSelectDifficulty()

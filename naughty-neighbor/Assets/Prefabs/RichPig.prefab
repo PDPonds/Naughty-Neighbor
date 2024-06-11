@@ -163,8 +163,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8830069231426345230}
+  - component: {fileID: 2496681807437647691}
+  - component: {fileID: 114691780700452965}
   m_Layer: 0
-  m_Name: RichPick
+  m_Name: RichPig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -186,8 +188,32 @@ Transform:
   - {fileID: 7390148182982277344}
   - {fileID: 5691892191077178191}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2496681807437647691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3842468110781333777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7885991d7ebf624a8c96bc263c901aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114691780700452965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3842468110781333777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2d7b56fcb1e0034ea17abf9c2909daa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6079456450840626772
 GameObject:
   m_ObjectHideFlags: 0

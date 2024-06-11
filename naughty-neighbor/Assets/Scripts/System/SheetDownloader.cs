@@ -27,7 +27,7 @@ public class SheetDownloader : MonoBehaviour
             }
             else
             {
-                GameManager.Instance.gameData = ProcessData(webRequest.downloadHandler.text);
+                GameManager.gameData = ProcessData(webRequest.downloadHandler.text);
             }
         }
     }
