@@ -17,6 +17,9 @@ public class GameManager : Singleton<GameManager>
     public GameObject AuntNextDoor;
     public GameObject RichPig;
 
+    float gameTime;
+    float turnTime;
+
     private void Awake()
     {
         SetupOnStartGame();
@@ -25,6 +28,11 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         SwitchGameState(GameState.AuntNextDoor);
+    }
+
+    private void Update()
+    {
+        UpdateGameState();
     }
 
     #region Setup On Scene Start
@@ -114,6 +122,22 @@ public class GameManager : Singleton<GameManager>
             case GameState.Winner:
                 break;
         }
+        turnTime = gameData.TimeToThink;
+    }
+
+    void UpdateGameState()
+    {
+        switch (State)
+        {
+            case GameState.AuntNextDoor:
+            case GameState.RichPig:
+
+                DecreaseTime();
+
+                break;
+            case GameState.Winner:
+                break;
+        }
     }
 
     public bool IsGameState(GameState state)
@@ -146,6 +170,29 @@ public class GameManager : Singleton<GameManager>
         {
             PlayerManager player1 = AuntNextDoor.GetComponent<PlayerManager>();
             return player1 != null ? player1 : null;
+        }
+    }
+
+    GameState GetNextGameState()
+    {
+        if (IsGameState(GameState.AuntNextDoor)) return GameState.RichPig;
+        else if (IsGameState(GameState.RichPig)) return GameState.AuntNextDoor;
+        else return GameState.Winner;
+    }
+
+    void DecreaseTime()
+    {
+        gameTime += Time.deltaTime;
+        turnTime -= Time.deltaTime;
+
+        if (turnTime <= gameData.TimeToWarning)
+        {
+            Debug.Log("Warning");
+        }
+
+        if (turnTime <= 0)
+        {
+            SwitchGameState(GetNextGameState());
         }
     }
 
