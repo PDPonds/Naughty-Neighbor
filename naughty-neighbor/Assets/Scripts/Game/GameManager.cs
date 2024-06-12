@@ -1,16 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public enum GameMode { SinglePlayer, MultiPlayer }
 public enum GameDifficulty { Easy, Normal, Hard }
-public enum GameState { RichPig, AuntNextDoor, Winner }
+public enum GameState { RichPig, AuntNextDoor, WaitingForNextTurn, Winner }
 
 public class GameManager : Singleton<GameManager>
 {
+    public event Action<float> OnSetupWindForce;
+
     public static GameMode Mode = GameMode.MultiPlayer;
     public static GameDifficulty Difficulty = GameDifficulty.Easy;
-    public static GameState State = GameState.AuntNextDoor;
+    public GameState State = GameState.AuntNextDoor;
 
     public static GameData gameData = new GameData();
 
@@ -20,12 +23,17 @@ public class GameManager : Singleton<GameManager>
 
     [Header("===== Projectile =====")]
     public AnimationCurve trajectoryAnimationCurve;
-    
+
+    [Header("===== Wind =====")]
+    public float curWindForce;
+
     [Header("===== Bullet =====")]
     public GameObject PowerThrowBullet;
 
+    Target lastTarget;
     float gameTime;
     float turnTime;
+    float waitingTime;
 
     private void Awake()
     {
@@ -110,6 +118,7 @@ public class GameManager : Singleton<GameManager>
         {
             case GameState.AuntNextDoor:
 
+                SetupWindForce();
                 if (IsGameMode(GameMode.MultiPlayer))
                 {
                     EnablePlayerManagerOnGameObject(RichPig, false);
@@ -117,18 +126,21 @@ public class GameManager : Singleton<GameManager>
                 }
 
                 PlayerManager auntPlayer = AuntNextDoor.GetComponent<PlayerManager>();
-                auntPlayer.SetupNormalBullet();
+                auntPlayer.SetupOnPhaseStart();
+
+                DestroyAllBulletInScene();
 
                 break;
             case GameState.RichPig:
 
+                SetupWindForce();
                 if (IsGameMode(GameMode.MultiPlayer))
                 {
                     EnablePlayerManagerOnGameObject(RichPig, true);
                     EnablePlayerManagerOnGameObject(AuntNextDoor, false);
 
                     PlayerManager pigPlayer = RichPig.GetComponent<PlayerManager>();
-                    pigPlayer.SetupNormalBullet();
+                    pigPlayer.SetupOnPhaseStart();
                 }
                 else
                 {
@@ -136,12 +148,26 @@ public class GameManager : Singleton<GameManager>
                     pigEnemy.SetupNormalBullet();
                 }
 
+                DestroyAllBulletInScene();
+
+                break;
+            case GameState.WaitingForNextTurn:
+                waitingTime = gameData.WaitingDuration;
                 break;
             case GameState.Winner:
+
+                GameUIManager.Instance.ShowEndGamePanel();
+
                 break;
         }
         turnTime = gameData.TimeToThink;
         GameUIManager.Instance.ShowArrow();
+    }
+
+    public void SwitchToWaitingForNextTurnState(Target targetType)
+    {
+        lastTarget = targetType;
+        SwitchGameState(GameState.WaitingForNextTurn);
     }
 
     void UpdateGameState()
@@ -150,9 +176,10 @@ public class GameManager : Singleton<GameManager>
         {
             case GameState.AuntNextDoor:
             case GameState.RichPig:
-
-                DecreaseTime();
-
+                DecreaseTurnTime();
+                break;
+            case GameState.WaitingForNextTurn:
+                DecreaseWaitingTime();
                 break;
             case GameState.Winner:
                 break;
@@ -199,16 +226,19 @@ public class GameManager : Singleton<GameManager>
         else return GameState.Winner;
     }
 
-    void DecreaseTime()
+    void DecreaseTurnTime()
     {
         gameTime += Time.deltaTime;
 
         if (IsGameState(GameState.AuntNextDoor))
         {
             PlayerManager player = AuntNextDoor.GetComponent<PlayerManager>();
-            if (!player.isHold)
+            if (player.IsPlayerState(PlayerState.BeforeAttack))
             {
-                turnTime -= Time.deltaTime;
+                if (!player.isHold)
+                {
+                    turnTime -= Time.deltaTime;
+                }
             }
         }
         else
@@ -216,9 +246,12 @@ public class GameManager : Singleton<GameManager>
             if (IsGameMode(GameMode.MultiPlayer))
             {
                 PlayerManager player = RichPig.GetComponent<PlayerManager>();
-                if (!player.isHold)
+                if (player.IsPlayerState(PlayerState.BeforeAttack))
                 {
-                    turnTime -= Time.deltaTime;
+                    if (!player.isHold)
+                    {
+                        turnTime -= Time.deltaTime;
+                    }
                 }
             }
             else
@@ -237,6 +270,40 @@ public class GameManager : Singleton<GameManager>
         {
             SwitchGameState(GetNextGameState());
         }
+    }
+
+    void DecreaseWaitingTime()
+    {
+        waitingTime -= Time.deltaTime;
+        if (waitingTime < 0)
+        {
+            if (lastTarget == Target.Pig) SwitchGameState(GameState.RichPig);
+            else if (lastTarget == Target.Aunt) SwitchGameState(GameState.AuntNextDoor);
+        }
+    }
+
+    void DestroyAllBulletInScene()
+    {
+        Bullet[] bullet = FindObjectsOfType<Bullet>();
+        foreach (Bullet b in bullet)
+        {
+            Destroy(b.gameObject);
+        }
+    }
+
+    #endregion
+
+    #region Wind Force
+
+    void SetupWindForce()
+    {
+        curWindForce = RandomWindForce();
+        OnSetupWindForce?.Invoke(curWindForce);
+    }
+
+    float RandomWindForce()
+    {
+        return UnityEngine.Random.Range(gameData.MinWindForce, gameData.MaxWindForce);
     }
 
     #endregion

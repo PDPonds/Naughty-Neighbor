@@ -38,68 +38,84 @@ public class SheetDownloader : MonoBehaviour
         string[] rows = cvsData.Split(lineEnding);
         int dataStartRowIndex = 1;
         GameData gameData = new GameData();
+
+        int amountIndex = 1;
+        int damageIndex = 2;
+        int hpIndex = 3;
+        int missedChanceIndex = 4;
+        int targetHPToHeal = 5;
+        int smallShotRate = 6;
+        int secIndex = 7;
+        int minIndex = 8;
+        int maxIndex = 9;
+
         for (int i = dataStartRowIndex; i < rows.Length; i++)
         {
             string[] cells = rows[i].Split(',');
             switch (i)
             {
                 case 1:
-                    gameData.PlayerHP = ParseInt(cells[3]);
+                    gameData.PlayerHP = ParseInt(cells[hpIndex]);
                     break;
                 case 2:
-                    gameData.EnemyHP_Easy = ParseInt(cells[3]);
-                    gameData.EnemyMissedRate_Easy = ParseInt(cells[4]);
-                    gameData.EnemyTargetHPToHeal_Easy = ParseInt(cells[5]);
-                    gameData.EnemySmallShotRate_Easy = ParseInt(cells[6]);
+                    gameData.EnemyHP_Easy = ParseInt(cells[hpIndex]);
+                    gameData.EnemyMissedRate_Easy = ParseInt(cells[missedChanceIndex]);
+                    gameData.EnemyTargetHPToHeal_Easy = ParseInt(cells[targetHPToHeal]);
+                    gameData.EnemySmallShotRate_Easy = ParseInt(cells[smallShotRate]);
                     break;
                 case 3:
-                    gameData.EnemyHP_Normal = ParseInt(cells[3]);
-                    gameData.EnemyMissedRate_Normal = ParseInt(cells[4]);
-                    gameData.EnemyTargetHPToHeal_Normal = ParseInt(cells[5]);
-                    gameData.EnemySmallShotRate_Normal = ParseInt(cells[6]);
+                    gameData.EnemyHP_Normal = ParseInt(cells[hpIndex]);
+                    gameData.EnemyMissedRate_Normal = ParseInt(cells[missedChanceIndex]);
+                    gameData.EnemyTargetHPToHeal_Normal = ParseInt(cells[targetHPToHeal]);
+                    gameData.EnemySmallShotRate_Normal = ParseInt(cells[smallShotRate]);
                     break;
                 case 4:
-                    gameData.EnemyHP_Hard = ParseInt(cells[3]);
-                    gameData.EnemyMissedRate_Hard = ParseInt(cells[4]);
-                    gameData.EnemyTargetHPToHeal_Hard = ParseInt(cells[5]);
-                    gameData.EnemySmallShotRate_Hard = ParseInt(cells[6]);
+                    gameData.EnemyHP_Hard = ParseInt(cells[hpIndex]);
+                    gameData.EnemyMissedRate_Hard = ParseInt(cells[missedChanceIndex]);
+                    gameData.EnemyTargetHPToHeal_Hard = ParseInt(cells[targetHPToHeal]);
+                    gameData.EnemySmallShotRate_Hard = ParseInt(cells[smallShotRate]);
                     break;
                 case 5:
-                    gameData.NormalAttack = ParseInt(cells[2]);
+                    gameData.NormalAttack = ParseInt(cells[damageIndex]);
                     break;
                 case 6:
-                    gameData.SmallAttack = ParseInt(cells[2]);
+                    gameData.SmallAttack = ParseInt(cells[damageIndex]);
                     break;
                 case 7:
-                    gameData.PowerThrow = ParseInt(cells[2]);
+                    gameData.PowerThrow = ParseInt(cells[damageIndex]);
                     break;
                 case 8:
-                    gameData.DoubleAttackAmount = ParseInt(cells[1]);
-                    gameData.DoubleAttack = ParseInt(cells[2]);
+                    gameData.DoubleAttackAmount = ParseInt(cells[amountIndex]);
+                    gameData.DoubleAttack = ParseInt(cells[damageIndex]);
                     break;
                 case 9:
-                    gameData.Heal = ParseInt(cells[3]);
+                    gameData.Heal = ParseInt(cells[hpIndex]);
                     break;
                 case 10:
-                    gameData.TimeToThink = ParseInt(cells[7]);
+                    gameData.TimeToThink = ParseFloat(cells[secIndex]);
                     break;
                 case 11:
-                    gameData.TimeToWarning = ParseInt(cells[7]);
+                    gameData.TimeToWarning = ParseFloat(cells[secIndex]);
                     break;
                 case 12:
-                    gameData.MinDistance = ParseFloat(cells[1]);
+                    gameData.MinDistance = ParseFloat(cells[minIndex]);
+                    gameData.MaxDistance = ParseFloat(cells[maxIndex]);
                     break;
                 case 13:
-                    gameData.MaxDistance = ParseFloat(cells[1]);
+                    gameData.MinWindForce = ParseFloat(cells[minIndex]);
+                    gameData.MaxWindForce = ParseFloat(cells[maxIndex]);
                     break;
                 case 14:
-                    gameData.HoldMultiply = ParseInt(cells[1]);
+                    gameData.HoldMultiply = ParseFloat(cells[amountIndex]);
                     break;
                 case 15:
-                    gameData.ShootDuration = ParseFloat(cells[1]);
+                    gameData.ShootDuration = ParseFloat(cells[amountIndex]);
                     break;
                 case 16:
-                    gameData.TrajectoryMaxHeight = ParseFloat(cells[1]);
+                    gameData.TrajectoryMaxHeight = ParseFloat(cells[amountIndex]);
+                    break;
+                case 17:
+                    gameData.WaitingDuration = ParseFloat(cells[secIndex]);
                     break;
             }
         }
@@ -163,13 +179,18 @@ public class GameData
     public int Heal;
 
     [Header("===== Time =====")]
-    public int TimeToThink;
-    public int TimeToWarning;
+    public float TimeToThink;
+    public float TimeToWarning;
+    public float WaitingDuration;
 
     [Header("===== Distance =====")]
     public float MinDistance;
     public float MaxDistance;
     public float HoldMultiply;
+
+    [Header("===== Wind =====")]
+    public float MinWindForce;
+    public float MaxWindForce;
 
     [Header("===== Bullet =====")]
     public float ShootDuration;

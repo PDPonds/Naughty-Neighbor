@@ -21,6 +21,18 @@ public class GameUIManager : Singleton<GameUIManager>
     [SerializeField] GameObject RichPigAttackBorder;
     [SerializeField] Image RichPigAttackFill;
 
+    [Header("===== Wind =====")]
+    [SerializeField] GameObject leftWindArrow;
+    [SerializeField] GameObject rightWindArrow;
+
+    [Header("===== EndGame =====")]
+    [SerializeField] GameObject endGamePage;
+
+    private void OnEnable()
+    {
+        GameManager.Instance.OnSetupWindForce += UpdateWindArrow;
+    }
+
     private void Update()
     {
         UpdateAttackRateInfo();
@@ -112,13 +124,33 @@ public class GameUIManager : Singleton<GameUIManager>
         }
         else
         {
-            PlayerManager player = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
+            PlayerManager player = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
             float curHp = player.curHP;
             float maxHp = GameManager.gameData.PlayerHP;
 
             float percent = curHp / maxHp;
             RichPigHpFill.fillAmount = percent;
         }
+    }
+
+    public void UpdateWindArrow(float windForce)
+    {
+        leftWindArrow.SetActive(false);
+        rightWindArrow.SetActive(false);
+
+        if (windForce > 0)
+        {
+            rightWindArrow.SetActive(true);
+        }
+        else if (windForce < 0)
+        {
+            leftWindArrow.SetActive(true);
+        }
+    }
+
+    public void ShowEndGamePanel()
+    {
+        endGamePage.SetActive(true);
     }
 
 }

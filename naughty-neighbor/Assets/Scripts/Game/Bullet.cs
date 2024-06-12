@@ -6,8 +6,17 @@ public enum Target { Pig, Aunt }
 
 public class Bullet : MonoBehaviour
 {
+    Rigidbody2D rb;
+    CircleCollider2D circleCollider;
+
     [SerializeField] Target targetType;
     Vector3 target;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        circleCollider = GetComponent<CircleCollider2D>();
+    }
 
     private void Start()
     {
@@ -38,41 +47,63 @@ public class Bullet : MonoBehaviour
     {
         if (collision.CompareTag("Ground"))
         {
-            Debug.Log("Ground");
-            Destroy(gameObject);
+            AfterHit();
         }
 
         if (targetType == Target.Pig)
         {
             if (collision.CompareTag("PigSmall"))
             {
-                Debug.Log("PigSmall");
-                Destroy(gameObject);
-
+                AfterHit();
+                if (GameManager.IsGameMode(GameMode.SinglePlayer))
+                {
+                    EnemyManager pigEnemy = GameManager.Instance.RichPig.GetComponent<EnemyManager>();
+                    pigEnemy.TakeDamage(GameManager.gameData.SmallAttack);
+                }
+                else
+                {
+                    PlayerManager pigPlayer = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
+                    pigPlayer.TakeDamage(GameManager.gameData.SmallAttack);
+                }
             }
             else if (collision.CompareTag("PigNormal"))
             {
-                Debug.Log("PigNormal");
-                Destroy(gameObject);
-
+                AfterHit();
+                if (GameManager.IsGameMode(GameMode.SinglePlayer))
+                {
+                    EnemyManager pigEnemy = GameManager.Instance.RichPig.GetComponent<EnemyManager>();
+                    pigEnemy.TakeDamage(GameManager.gameData.NormalAttack);
+                }
+                else
+                {
+                    PlayerManager pigPlayer = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
+                    pigPlayer.TakeDamage(GameManager.gameData.NormalAttack);
+                }
             }
         }
         else if (targetType == Target.Aunt)
         {
             if (collision.CompareTag("AuntSmall"))
             {
-                Debug.Log("AuntSmall");
-                Destroy(gameObject);
-
+                AfterHit();
+                PlayerManager auntPlayer = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
+                auntPlayer.TakeDamage(GameManager.gameData.SmallAttack);
             }
             else if (collision.CompareTag("AuntNormal"))
             {
-                Debug.Log("AuntNormal");
-                Destroy(gameObject);
-
+                AfterHit();
+                PlayerManager auntPlayer = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
+                auntPlayer.TakeDamage(GameManager.gameData.NormalAttack);
             }
         }
 
+    }
+
+    void AfterHit()
+    {
+        circleCollider.isTrigger = false;
+        rb.gravityScale = 1;
+        GameManager.Instance.SwitchToWaitingForNextTurnState(targetType);
     }
 
 }

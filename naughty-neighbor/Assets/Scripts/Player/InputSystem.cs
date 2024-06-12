@@ -23,18 +23,25 @@ public class InputSystem : MonoBehaviour
     private void StartHold()
     {
         PlayerManager player = GameManager.Instance.GetCurPlayerManager();
-        player.isHold = true;
-        player.isDecreaseDis = false;
-        GameUIManager.Instance.ShowAttackRate();
+        if (player.IsPlayerState(PlayerState.BeforeAttack))
+        {
+            player.isHold = true;
+            player.isDecreaseDis = false;
+            GameUIManager.Instance.ShowAttackRate();
+        }
     }
 
     private void StopHold()
     {
         PlayerManager player = GameManager.Instance.GetCurPlayerManager();
-        player.isHold = false;
-        player.InstantiatBullet(player.curBullet);
-        GameUIManager.Instance.HideAttackRate();
-        player.curDis = 0;
+        if (player.IsPlayerState(PlayerState.BeforeAttack))
+        {
+            player.isHold = false;
+            player.InstantiatBullet(player.curBullet);
+            GameUIManager.Instance.HideAttackRate();
+            player.curDis = 0;
+            player.SwitchState(PlayerState.AfterAttack);
+        }
     }
 
 
