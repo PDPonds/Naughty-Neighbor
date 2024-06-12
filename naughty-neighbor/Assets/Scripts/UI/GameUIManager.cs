@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameUIManager : Singleton<GameUIManager>
@@ -27,10 +29,22 @@ public class GameUIManager : Singleton<GameUIManager>
 
     [Header("===== EndGame =====")]
     [SerializeField] GameObject endGamePage;
+    [SerializeField] TextMeshProUGUI winText;
+    [SerializeField] TextMeshProUGUI timeText;
+    [SerializeField] Button replayButton;
+    [SerializeField] Button shareButton;
+    [SerializeField] Button homeButton;
 
     private void OnEnable()
     {
         GameManager.Instance.OnSetupWindForce += UpdateWindArrow;
+    }
+
+    private void Start()
+    {
+        replayButton.onClick.AddListener(Replay);
+        shareButton.onClick.AddListener(Share);
+        homeButton.onClick.AddListener(Home);
     }
 
     private void Update()
@@ -151,6 +165,66 @@ public class GameUIManager : Singleton<GameUIManager>
     public void ShowEndGamePanel()
     {
         endGamePage.SetActive(true);
+        SetupWinLoseText();
+        SetupGameTime();
     }
+
+    public void SetupWinLoseText()
+    {
+        if (GameManager.IsGameMode(GameMode.SinglePlayer))
+        {
+            PlayerManager player = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
+            if (player.curHP <= 0)
+            {
+                winText.text = GameManager.gameData.SinglePlayerLose;
+            }
+
+            EnemyManager enemy = GameManager.Instance.RichPig.GetComponent<EnemyManager>();
+            if (enemy.curHP <= 0)
+            {
+                winText.text = GameManager.gameData.SinglePlayerWin;
+            }
+
+        }
+        else if (GameManager.IsGameMode(GameMode.MultiPlayer))
+        {
+            PlayerManager aunt = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
+            if (aunt.curHP <= 0)
+            {
+                winText.text = GameManager.gameData.Player2Win;
+            }
+
+            PlayerManager pig = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
+            if (pig.curHP <= 0)
+            {
+                winText.text = GameManager.gameData.Player1Win;
+            }
+
+        }
+    }
+
+    public void SetupGameTime()
+    {
+        int min = (int)GameManager.Instance.gameTime / 60;
+        int sec = (int)GameManager.Instance.gameTime % 60;
+        timeText.text = $"{min} : {sec} m";
+    }
+
+    #region Button
+    void Replay()
+    {
+        SceneManager.LoadScene(1);
+    }
+
+    void Share()
+    {
+
+    }
+
+    void Home()
+    {
+        SceneManager.LoadScene(0);
+    }
+    #endregion
 
 }

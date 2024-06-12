@@ -31,7 +31,7 @@ public class GameManager : Singleton<GameManager>
     public GameObject PowerThrowBullet;
 
     Target lastTarget;
-    float gameTime;
+    [HideInInspector] public float gameTime;
     float turnTime;
     float waitingTime;
 

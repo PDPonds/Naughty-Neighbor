@@ -48,6 +48,7 @@ public class SheetDownloader : MonoBehaviour
         int secIndex = 7;
         int minIndex = 8;
         int maxIndex = 9;
+        int textIndex = 10;
 
         for (int i = dataStartRowIndex; i < rows.Length; i++)
         {
@@ -116,6 +117,18 @@ public class SheetDownloader : MonoBehaviour
                     break;
                 case 17:
                     gameData.WaitingDuration = ParseFloat(cells[secIndex]);
+                    break;
+                case 18:
+                    gameData.SinglePlayerWin = cells[textIndex];
+                    break;
+                case 19:
+                    gameData.SinglePlayerLose = cells[textIndex];
+                    break;
+                case 20:
+                    gameData.Player1Win = cells[textIndex];
+                    break;
+                case 21:
+                    gameData.Player2Win = cells[textIndex];
                     break;
             }
         }
@@ -195,6 +208,12 @@ public class GameData
     [Header("===== Bullet =====")]
     public float ShootDuration;
     public float TrajectoryMaxHeight;
+
+    [Header("===== End Game =====")]
+    public string SinglePlayerWin;
+    public string SinglePlayerLose;
+    public string Player1Win;
+    public string Player2Win;
 
 }
 
