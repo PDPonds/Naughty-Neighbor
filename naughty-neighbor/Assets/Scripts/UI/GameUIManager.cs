@@ -23,6 +23,14 @@ public class GameUIManager : Singleton<GameUIManager>
     [SerializeField] GameObject RichPigAttackBorder;
     [SerializeField] Image RichPigAttackFill;
 
+    [Header("===== Alert Time =====")]
+    [Header("- Aunt Next Door")]
+    [SerializeField] GameObject AuntNextDoorAlertPage;
+    [SerializeField] Image AuntNextDoorAlertFill;
+    [Header("- RichPig")]
+    [SerializeField] GameObject RichPigAlertPage;
+    [SerializeField] Image RichPigAlertFill;
+
     [Header("===== Wind =====")]
     [SerializeField] GameObject leftWindArrow;
     [SerializeField] GameObject rightWindArrow;
@@ -51,6 +59,7 @@ public class GameUIManager : Singleton<GameUIManager>
     private void Update()
     {
         UpdateAttackRateInfo();
+        UpdateAlertInfo();
     }
 
     void UpdateAttackRateInfo()
@@ -79,6 +88,44 @@ public class GameUIManager : Singleton<GameUIManager>
                 RichPigAttackFill.fillAmount = percent;
             }
         }
+    }
+
+    void UpdateAlertInfo()
+    {
+        float maxAlertTime = GameManager.gameData.TimeToWarning;
+        float curTime = GameManager.Instance.turnTime;
+        float percent = curTime / maxAlertTime;
+
+        if (AuntNextDoorAlertPage.activeSelf)
+        {
+            AuntNextDoorAlertFill.fillAmount = percent;
+        }
+
+        if (RichPigAlertPage.activeSelf)
+        {
+            RichPigAlertFill.fillAmount = percent;
+        }
+    }
+
+    public void ShowAlertPage()
+    {
+        HideAlertPage();
+        if (GameManager.Instance.IsGameState(GameState.AuntNextDoor))
+        {
+            AuntNextDoorArrow.SetActive(false);
+            AuntNextDoorAlertPage.SetActive(true);
+        }
+        else if (GameManager.Instance.IsGameState(GameState.RichPig))
+        {
+            RichPigArrow.SetActive(false);
+            RichPigAlertPage.SetActive(true);
+        }
+    }
+
+    public void HideAlertPage()
+    {
+        AuntNextDoorAlertPage.SetActive(false);
+        RichPigAlertPage.SetActive(false);
     }
 
     public void ShowAttackRate()
@@ -174,8 +221,6 @@ public class GameUIManager : Singleton<GameUIManager>
 
         float posX = ((180f * percent) / 100f) - 90f;
         windParamotor.anchoredPosition = new Vector3(posX, 0, 0);
-
-        Debug.Log(windRange + ":" + windForce + ":" + percent + ":" + posX);
     }
 
     public void ShowEndGamePanel()

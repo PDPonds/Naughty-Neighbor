@@ -103,6 +103,7 @@ public class Bullet : MonoBehaviour
     {
         circleCollider.isTrigger = false;
         rb.gravityScale = 1;
+        rb.AddForce(Vector2.up, ForceMode2D.Impulse);
         GameManager.Instance.SwitchToWaitingForNextTurnState(targetType);
     }
 

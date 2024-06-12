@@ -23,7 +23,7 @@ public class InputSystem : MonoBehaviour
     private void StartHold()
     {
         PlayerManager player = GameManager.Instance.GetCurPlayerManager();
-        if (player.IsPlayerState(PlayerState.BeforeAttack))
+        if (player.IsPlayerState(PlayerState.BeforeAttack) && !player.isHold)
         {
             player.isHold = true;
             player.isDecreaseDis = false;
@@ -34,7 +34,7 @@ public class InputSystem : MonoBehaviour
     private void StopHold()
     {
         PlayerManager player = GameManager.Instance.GetCurPlayerManager();
-        if (player.IsPlayerState(PlayerState.BeforeAttack))
+        if (player.IsPlayerState(PlayerState.BeforeAttack) && player.isHold)
         {
             player.isHold = false;
             player.InstantiatBullet(player.curBullet);

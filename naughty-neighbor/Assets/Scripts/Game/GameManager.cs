@@ -32,7 +32,7 @@ public class GameManager : Singleton<GameManager>
 
     Target lastTarget;
     [HideInInspector] public float gameTime;
-    float turnTime;
+    [HideInInspector] public float turnTime;
     float waitingTime;
 
     private void Awake()
@@ -127,6 +127,8 @@ public class GameManager : Singleton<GameManager>
 
                 PlayerManager auntPlayer = AuntNextDoor.GetComponent<PlayerManager>();
                 auntPlayer.SetupOnPhaseStart();
+                auntPlayer.curDis = 0;
+                auntPlayer.isHold = false;
 
                 DestroyAllBulletInScene();
 
@@ -141,6 +143,8 @@ public class GameManager : Singleton<GameManager>
 
                     PlayerManager pigPlayer = RichPig.GetComponent<PlayerManager>();
                     pigPlayer.SetupOnPhaseStart();
+                    pigPlayer.curDis = 0;
+                    pigPlayer.isHold = false;
                 }
                 else
                 {
@@ -160,6 +164,7 @@ public class GameManager : Singleton<GameManager>
 
                 break;
         }
+        GameUIManager.Instance.HideAlertPage();
         turnTime = gameData.TimeToThink;
         GameUIManager.Instance.ShowArrow();
     }
@@ -235,10 +240,7 @@ public class GameManager : Singleton<GameManager>
             PlayerManager player = AuntNextDoor.GetComponent<PlayerManager>();
             if (player.IsPlayerState(PlayerState.BeforeAttack))
             {
-                if (!player.isHold)
-                {
-                    turnTime -= Time.deltaTime;
-                }
+                turnTime -= Time.deltaTime;
             }
         }
         else
@@ -248,10 +250,7 @@ public class GameManager : Singleton<GameManager>
                 PlayerManager player = RichPig.GetComponent<PlayerManager>();
                 if (player.IsPlayerState(PlayerState.BeforeAttack))
                 {
-                    if (!player.isHold)
-                    {
-                        turnTime -= Time.deltaTime;
-                    }
+                    turnTime -= Time.deltaTime;
                 }
             }
             else
@@ -263,11 +262,13 @@ public class GameManager : Singleton<GameManager>
 
         if (turnTime <= gameData.TimeToWarning)
         {
-            Debug.Log("Warning");
+            GameUIManager.Instance.ShowAlertPage();
         }
 
         if (turnTime <= 0)
         {
+            GameUIManager.Instance.HideAttackRate();
+            GameUIManager.Instance.HideAlertPage();
             SwitchGameState(GetNextGameState());
         }
     }
