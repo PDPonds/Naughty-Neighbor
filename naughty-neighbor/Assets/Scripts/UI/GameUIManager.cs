@@ -26,6 +26,7 @@ public class GameUIManager : Singleton<GameUIManager>
     [Header("===== Wind =====")]
     [SerializeField] GameObject leftWindArrow;
     [SerializeField] GameObject rightWindArrow;
+    [SerializeField] RectTransform windParamotor;
 
     [Header("===== EndGame =====")]
     [SerializeField] GameObject endGamePage;
@@ -160,6 +161,21 @@ public class GameUIManager : Singleton<GameUIManager>
         {
             leftWindArrow.SetActive(true);
         }
+        UpdateWindParamotor(windForce);
+    }
+
+    void UpdateWindParamotor(float windForce)
+    {
+        float min = Mathf.Abs(GameManager.gameData.MinWindForce);
+        float max = Mathf.Abs(GameManager.gameData.MaxWindForce);
+        float windRange = min + max;
+        float curWindRange = windForce + min;
+        float percent = (curWindRange / windRange) * 100f;
+
+        float posX = ((180f * percent) / 100f) - 90f;
+        windParamotor.anchoredPosition = new Vector3(posX, 0, 0);
+
+        Debug.Log(windRange + ":" + windForce + ":" + percent + ":" + posX);
     }
 
     public void ShowEndGamePanel()
