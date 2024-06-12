@@ -8,14 +8,21 @@ public enum GameState { RichPig, AuntNextDoor, Winner }
 
 public class GameManager : Singleton<GameManager>
 {
-    public static GameMode Mode = GameMode.SinglePlayer;
+    public static GameMode Mode = GameMode.MultiPlayer;
     public static GameDifficulty Difficulty = GameDifficulty.Easy;
     public static GameState State = GameState.AuntNextDoor;
 
     public static GameData gameData = new GameData();
 
+    [Header("===== Player GameObject =====")]
     public GameObject AuntNextDoor;
     public GameObject RichPig;
+
+    [Header("===== Projectile =====")]
+    public AnimationCurve trajectoryAnimationCurve;
+    
+    [Header("===== Bullet =====")]
+    public GameObject PowerThrowBullet;
 
     float gameTime;
     float turnTime;
@@ -109,6 +116,9 @@ public class GameManager : Singleton<GameManager>
                     EnablePlayerManagerOnGameObject(AuntNextDoor, true);
                 }
 
+                PlayerManager auntPlayer = AuntNextDoor.GetComponent<PlayerManager>();
+                auntPlayer.SetupNormalBullet();
+
                 break;
             case GameState.RichPig:
 
@@ -116,6 +126,14 @@ public class GameManager : Singleton<GameManager>
                 {
                     EnablePlayerManagerOnGameObject(RichPig, true);
                     EnablePlayerManagerOnGameObject(AuntNextDoor, false);
+
+                    PlayerManager pigPlayer = RichPig.GetComponent<PlayerManager>();
+                    pigPlayer.SetupNormalBullet();
+                }
+                else
+                {
+                    EnemyManager pigEnemy = RichPig.GetComponent<EnemyManager>();
+                    pigEnemy.SetupNormalBullet();
                 }
 
                 break;

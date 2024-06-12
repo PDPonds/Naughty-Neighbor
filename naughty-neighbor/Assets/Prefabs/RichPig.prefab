@@ -153,6 +153,37 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.25, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &2825257494160233372
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2735999915381740243}
+  m_Layer: 0
+  m_Name: BulletSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2735999915381740243
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2825257494160233372}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8830069231426345230}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3161561001427432359
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,6 +295,7 @@ Transform:
   - {fileID: 7390148182982277344}
   - {fileID: 5691892191077178191}
   - {fileID: 1290089303338592882}
+  - {fileID: 2735999915381740243}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -284,8 +316,7 @@ MonoBehaviour:
   curBullet: {fileID: 0}
   curDis: 0
   isHold: 0
-  isDoubleAttack: 0
-  powerThrowBullet: {fileID: 0}
+  isDecreaseDis: 0
 --- !u!114 &114691780700452965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,8 +333,6 @@ MonoBehaviour:
   curMaxHP: 0
   normalBulletPrefab: {fileID: 0}
   curBullet: {fileID: 0}
-  isDoubleAttack: 0
-  powerThrowBullet: {fileID: 0}
 --- !u!1 &4245145676189690668
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,7 +454,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6902284732615034214
 RectTransform:
   m_ObjectHideFlags: 0
@@ -648,7 +677,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8062934323478072928
 RectTransform:
   m_ObjectHideFlags: 0

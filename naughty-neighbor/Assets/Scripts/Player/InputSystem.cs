@@ -32,7 +32,7 @@ public class InputSystem : MonoBehaviour
     {
         PlayerManager player = GameManager.Instance.GetCurPlayerManager();
         player.isHold = false;
-        // Fire Bullet
+        player.InstantiatBullet(player.curBullet);
         GameUIManager.Instance.HideAttackRate();
         player.curDis = 0;
     }

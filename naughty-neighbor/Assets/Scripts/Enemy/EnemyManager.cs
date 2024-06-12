@@ -8,12 +8,11 @@ public class EnemyManager : Singleton<EnemyManager>
     [HideInInspector] public int curMaxHP;
 
     [Header("===== Attack =====")]
+    [SerializeField] Transform spawnBulletPoint;
     [SerializeField] GameObject normalBulletPrefab;
     [HideInInspector] public GameObject curBullet;
 
-    [Header("===== Item =====")]
-    [SerializeField] bool isDoubleAttack;
-    [SerializeField] GameObject powerThrowBullet;
+    bool isDoubleAttack;
 
     private void Start()
     {
@@ -64,5 +63,20 @@ public class EnemyManager : Singleton<EnemyManager>
         GameUIManager.Instance.UpdateRichPigHP();
     }
     #endregion
+
+    public void SetupNormalBullet()
+    {
+        curBullet = normalBulletPrefab;
+    }
+
+    //public void InstantiatBullet(GameObject bulletPrefab)
+    //{
+    //    GameObject bulletObj = Instantiate(bulletPrefab, spawnBulletPoint.position, Quaternion.identity);
+    //    Bullet bullet = bulletObj.GetComponent<Bullet>();
+
+    //    Vector3 target = transform.position + new Vector3(curDis, 0, 0);
+
+    //    bullet.OnSetupBullet(target);
+    //}
 
 }

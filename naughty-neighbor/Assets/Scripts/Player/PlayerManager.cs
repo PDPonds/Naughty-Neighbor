@@ -7,15 +7,14 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector] public int curHP;
 
     [Header("===== Attack =====")]
+    [SerializeField] Transform spawnBulletPoint;
     [SerializeField] GameObject normalBulletPrefab;
     [HideInInspector] public GameObject curBullet;
     [HideInInspector] public float curDis;
     [HideInInspector] public bool isHold;
     [HideInInspector] public bool isDecreaseDis;
 
-    [Header("===== Item =====")]
-    [SerializeField] bool isDoubleAttack;
-    [SerializeField] GameObject powerThrowBullet;
+    bool isDoubleAttack;
 
     private void Start()
     {
@@ -23,6 +22,11 @@ public class PlayerManager : MonoBehaviour
     }
 
     private void Update()
+    {
+        UpdateHold();
+    }
+
+    void UpdateHold()
     {
         if (isHold)
         {
@@ -80,5 +84,23 @@ public class PlayerManager : MonoBehaviour
 
     #endregion
 
+    public void SetupNormalBullet()
+    {
+        curBullet = normalBulletPrefab;
+    }
+
+    public void InstantiatBullet(GameObject bulletPrefab)
+    {
+        GameObject bulletObj = Instantiate(bulletPrefab, spawnBulletPoint.position, Quaternion.identity);
+        Bullet bullet = bulletObj.GetComponent<Bullet>();
+
+        Vector3 target = Vector3.zero;
+        if (GameManager.Instance.IsGameState(GameState.RichPig))
+            target = transform.position + new Vector3(curDis, 0, 0);
+        else if (GameManager.Instance.IsGameState(GameState.AuntNextDoor))
+            target = transform.position - new Vector3(curDis, 0, 0);
+
+        bullet.OnSetupBullet(target);
+    }
 
 }

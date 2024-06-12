@@ -5,8 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
-  - SmallPoint
-  - NormalPoint
+  - Bullet
+  - PigSmall
+  - PigNormal
+  - AuntSmall
+  - AuntNormal
   layers:
   - Default
   - TransparentFX

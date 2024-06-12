@@ -9,7 +9,7 @@ public class SheetDownloader : MonoBehaviour
     const string sheetId = "12KB8eV75NC_4-saBfeA8Sw4qZHBDGo1wKuXJjTUgj0Q";
     const string url = "https://docs.google.com/spreadsheets/d/" + sheetId + "/export?format=csv";
 
-    private void Start()
+    private void Awake()
     {
         StartCoroutine(DownloadData());
     }
@@ -95,6 +95,12 @@ public class SheetDownloader : MonoBehaviour
                 case 14:
                     gameData.HoldMultiply = ParseInt(cells[1]);
                     break;
+                case 15:
+                    gameData.ShootDuration = ParseFloat(cells[1]);
+                    break;
+                case 16:
+                    gameData.TrajectoryMaxHeight = ParseFloat(cells[1]);
+                    break;
             }
         }
         return gameData;
@@ -164,6 +170,10 @@ public class GameData
     public float MinDistance;
     public float MaxDistance;
     public float HoldMultiply;
+
+    [Header("===== Bullet =====")]
+    public float ShootDuration;
+    public float TrajectoryMaxHeight;
 
 }
 
