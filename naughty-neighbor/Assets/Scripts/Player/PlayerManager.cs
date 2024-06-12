@@ -11,6 +11,7 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector] public GameObject curBullet;
     [HideInInspector] public float curDis;
     [HideInInspector] public bool isHold;
+    [HideInInspector] public bool isDecreaseDis;
 
     [Header("===== Item =====")]
     [SerializeField] bool isDoubleAttack;
@@ -25,7 +26,16 @@ public class PlayerManager : MonoBehaviour
     {
         if (isHold)
         {
-            curDis += GameManager.gameData.HoldMultiply * Time.deltaTime;
+            if (isDecreaseDis)
+            {
+                curDis -= GameManager.gameData.HoldMultiply * Time.deltaTime;
+                if (curDis <= GameManager.gameData.MinDistance) isDecreaseDis = false;
+            }
+            else
+            {
+                curDis += GameManager.gameData.HoldMultiply * Time.deltaTime;
+                if (curDis >= GameManager.gameData.MaxDistance) isDecreaseDis = true;
+            }
             curDis = Mathf.Clamp(curDis, GameManager.gameData.MinDistance, GameManager.gameData.MaxDistance);
         }
     }

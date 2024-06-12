@@ -123,6 +123,7 @@ public class GameManager : Singleton<GameManager>
                 break;
         }
         turnTime = gameData.TimeToThink;
+        GameUIManager.Instance.ShowArrow();
     }
 
     void UpdateGameState()
@@ -183,7 +184,31 @@ public class GameManager : Singleton<GameManager>
     void DecreaseTime()
     {
         gameTime += Time.deltaTime;
-        turnTime -= Time.deltaTime;
+
+        if (IsGameState(GameState.AuntNextDoor))
+        {
+            PlayerManager player = AuntNextDoor.GetComponent<PlayerManager>();
+            if (!player.isHold)
+            {
+                turnTime -= Time.deltaTime;
+            }
+        }
+        else
+        {
+            if (IsGameMode(GameMode.MultiPlayer))
+            {
+                PlayerManager player = RichPig.GetComponent<PlayerManager>();
+                if (!player.isHold)
+                {
+                    turnTime -= Time.deltaTime;
+                }
+            }
+            else
+            {
+                turnTime -= Time.deltaTime;
+            }
+        }
+
 
         if (turnTime <= gameData.TimeToWarning)
         {

@@ -9,6 +9,85 @@ public class GameUIManager : Singleton<GameUIManager>
     [SerializeField] Image AuntNextDoorHpFill;
     [SerializeField] Image RichPigHpFill;
 
+    [Header("===== Turn =====")]
+    [SerializeField] GameObject AuntNextDoorArrow;
+    [SerializeField] GameObject RichPigArrow;
+
+    [Header("===== Attack Rate =====")]
+    [Header("- Aunt Next Door")]
+    [SerializeField] GameObject AuntNextDoorAttackBorder;
+    [SerializeField] Image AuntNextDoorAttackFill;
+    [Header("- RichPig")]
+    [SerializeField] GameObject RichPigAttackBorder;
+    [SerializeField] Image RichPigAttackFill;
+
+    private void Update()
+    {
+        UpdateAttackRateInfo();
+    }
+
+    void UpdateAttackRateInfo()
+    {
+        if (AuntNextDoorAttackBorder.activeSelf)
+        {
+            PlayerManager player = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
+            float curDis = player.curDis;
+            float maxDis = GameManager.gameData.MaxDistance;
+            float percent = curDis / maxDis;
+            AuntNextDoorAttackFill.fillAmount = percent;
+        }
+
+        if (RichPigAttackBorder.activeSelf)
+        {
+            if (GameManager.IsGameMode(GameMode.SinglePlayer))
+            {
+
+            }
+            else
+            {
+                PlayerManager player = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
+                float curDis = player.curDis;
+                float maxDis = GameManager.gameData.MaxDistance;
+                float percent = curDis / maxDis;
+                RichPigAttackFill.fillAmount = percent;
+            }
+        }
+    }
+
+    public void ShowAttackRate()
+    {
+        HideAttackRate();
+
+        if (GameManager.Instance.IsGameState(GameState.AuntNextDoor))
+        {
+            AuntNextDoorAttackBorder.SetActive(true);
+        }
+        else if (GameManager.Instance.IsGameState(GameState.RichPig))
+        {
+            RichPigAttackBorder.SetActive(true);
+        }
+
+    }
+
+    public void HideAttackRate()
+    {
+        AuntNextDoorAttackBorder.SetActive(false);
+        RichPigAttackBorder.SetActive(false);
+    }
+
+    public void ShowArrow()
+    {
+        AuntNextDoorArrow.SetActive(false);
+        RichPigArrow.SetActive(false);
+        if (GameManager.Instance.IsGameState(GameState.RichPig))
+        {
+            RichPigArrow.SetActive(true);
+        }
+        else if (GameManager.Instance.IsGameState(GameState.AuntNextDoor))
+        {
+            AuntNextDoorArrow.SetActive(true);
+        }
+    }
 
     public void UpdateAuntNextDoorHP()
     {
