@@ -152,9 +152,12 @@ public class GameManager : Singleton<GameManager>
                 }
                 else
                 {
+                    EnablePlayerManagerOnGameObject(RichPig, false);
                     EnemyManager pigEnemy = RichPig.GetComponent<EnemyManager>();
                     pigEnemy.SetupNormalBullet();
                     pigEnemy.curBullet = pigEnemy.normalBulletPrefab;
+                    pigEnemy.curTargetDis = 0;
+                    pigEnemy.SwitchState(EnemyState.SetupAction);
                 }
 
                 DestroyAllBulletInScene();
@@ -310,6 +313,20 @@ public class GameManager : Singleton<GameManager>
     float RandomWindForce()
     {
         return UnityEngine.Random.Range(gameData.MinWindForce, gameData.MaxWindForce);
+    }
+
+    public bool IsWindy()
+    {
+        float minWind = Mathf.Abs(gameData.MinWindForce);
+        float maxWind = Mathf.Abs(gameData.MaxWindForce);
+
+        float totalWind = maxWind + minWind;
+
+        float wind = Mathf.Abs(curWindForce) * 2f;
+
+        float halfWind = totalWind / 2f;
+        if (wind > halfWind) return true;
+        else return false;
     }
 
     #endregion

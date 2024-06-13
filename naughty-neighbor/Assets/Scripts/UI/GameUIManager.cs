@@ -100,7 +100,11 @@ public class GameUIManager : Singleton<GameUIManager>
         {
             if (GameManager.IsGameMode(GameMode.SinglePlayer))
             {
-
+                EnemyManager enemy = GameManager.Instance.RichPig.GetComponent<EnemyManager>();
+                float curDis = enemy.curTargetDis;
+                float maxDis = GameManager.gameData.MaxDistance;
+                float percent = curDis / maxDis;
+                RichPigAttackFill.fillAmount = percent;
             }
             else
             {

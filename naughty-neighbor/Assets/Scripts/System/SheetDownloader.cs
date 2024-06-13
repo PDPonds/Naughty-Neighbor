@@ -77,20 +77,19 @@ public class SheetDownloader : MonoBehaviour
                     gameData.EnemySmallShotRate_Hard = ParseInt(cells[smallShotRate]);
                     break;
                 case 5:
-                    gameData.NormalAttack = ParseInt(cells[damageIndex]);
+                    gameData.NormalAttackDamage = ParseInt(cells[damageIndex]);
                     break;
                 case 6:
-                    gameData.SmallAttack = ParseInt(cells[damageIndex]);
+                    gameData.SmallAttackDamage = ParseInt(cells[damageIndex]);
                     break;
                 case 7:
-                    gameData.PowerThrow = ParseInt(cells[damageIndex]);
+                    gameData.PowerThrowDamage = ParseInt(cells[damageIndex]);
                     break;
                 case 8:
-                    gameData.DoubleAttackAmount = ParseInt(cells[amountIndex]);
-                    gameData.DoubleAttack = ParseInt(cells[damageIndex]);
+                    gameData.DoubleAttackDamage = ParseInt(cells[damageIndex]);
                     break;
                 case 9:
-                    gameData.Heal = ParseInt(cells[hpIndex]);
+                    gameData.Heal = ParseInt(cells[amountIndex]);
                     break;
                 case 10:
                     gameData.TimeToThink = ParseFloat(cells[secIndex]);
@@ -110,7 +109,7 @@ public class SheetDownloader : MonoBehaviour
                     gameData.HoldMultiply = ParseFloat(cells[amountIndex]);
                     break;
                 case 15:
-                    gameData.ShootDuration = ParseFloat(cells[amountIndex]);
+                    gameData.ShootDuration = ParseFloat(cells[secIndex]);
                     break;
                 case 16:
                     gameData.TrajectoryMaxHeight = ParseFloat(cells[amountIndex]);
@@ -182,13 +181,12 @@ public class GameData
     public int EnemySmallShotRate_Hard;
 
     [Header("===== Attack =====")]
-    public int NormalAttack;
-    public int SmallAttack;
+    public int NormalAttackDamage;
+    public int SmallAttackDamage;
 
     [Header("===== Item =====")]
-    public int PowerThrow;
-    public int DoubleAttackAmount;
-    public int DoubleAttack;
+    public int PowerThrowDamage;
+    public int DoubleAttackDamage;
     public int Heal;
 
     [Header("===== Time =====")]

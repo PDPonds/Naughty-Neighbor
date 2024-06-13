@@ -115,9 +115,9 @@ public class PlayerManager : MonoBehaviour
             target = transform.position - new Vector3(curDis + GameManager.Instance.curWindForce, 0, 0);
 
         if (GameManager.Instance.IsGameState(GameState.AuntNextDoor))
-            bullet.OnSetupBullet(target, Target.Pig);
+            bullet.OnSetupBullet(target, Target.Pig, isDoubleAttack);
         else if (GameManager.Instance.IsGameState(GameState.RichPig))
-            bullet.OnSetupBullet(target, Target.Aunt);
+            bullet.OnSetupBullet(target, Target.Aunt, isDoubleAttack);
     }
 
     #region Player State

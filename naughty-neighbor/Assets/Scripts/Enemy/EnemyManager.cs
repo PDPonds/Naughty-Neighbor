@@ -1,9 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
+public enum EnemyState
+{
+    SetupAction,
+    ChargeToAttack,
+    AfterAttack
+}
+
 
 public class EnemyManager : Singleton<EnemyManager>
 {
+    EnemyState enemyState;
+
     [HideInInspector] public int curHP;
     [HideInInspector] public int curMaxHP;
 
@@ -11,12 +22,19 @@ public class EnemyManager : Singleton<EnemyManager>
     [SerializeField] Transform spawnBulletPoint;
     public GameObject normalBulletPrefab;
     [HideInInspector] public GameObject curBullet;
+    [HideInInspector] public float targetDis;
+    [HideInInspector] public float curTargetDis;
 
     public bool isDoubleAttack;
 
     private void Start()
     {
         SetupEnemy();
+    }
+
+    private void Update()
+    {
+        UpdateState();
     }
 
     #region Status
@@ -69,13 +87,16 @@ public class EnemyManager : Singleton<EnemyManager>
         curBullet = normalBulletPrefab;
     }
 
-    public void InstantiatBullet(GameObject bulletPrefab)
+    public void InstantiatBullet(GameObject bulletPrefab, float targetDis)
     {
         GameObject bulletObj = Instantiate(bulletPrefab, spawnBulletPoint.position, Quaternion.identity);
         Bullet bullet = bulletObj.GetComponent<Bullet>();
 
-        //Vector3 target = transform.position + new Vector3(curDis, 0, 0);
-        //bullet.OnSetupBullet(target);
+        Vector3 target = Vector3.zero;
+        if (GameManager.Instance.IsGameState(GameState.RichPig))
+            target = transform.position + new Vector3(this.targetDis, 0, 0);
+
+        bullet.OnSetupBullet(target, Target.Aunt, isDoubleAttack);
     }
 
     #region Item
@@ -85,6 +106,7 @@ public class EnemyManager : Singleton<EnemyManager>
         GameUIManager.Instance.HideAttackRate();
         GameUIManager.Instance.HideAlertPage();
         GameManager.Instance.SwitchGameState(GameManager.Instance.GetNextGameState());
+        SwitchState(EnemyState.AfterAttack);
         GameUIManager.Instance.DisableInteractiveButtonAfterUseHeal_Pig();
     }
 
@@ -100,6 +122,133 @@ public class EnemyManager : Singleton<EnemyManager>
         GameUIManager.Instance.DisableInteractiveButtonAfterUsePowerThrow_Pig();
 
     }
+    #endregion
+
+    #region State
+
+    public void SwitchState(EnemyState state)
+    {
+        enemyState = state;
+        switch (enemyState)
+        {
+            case EnemyState.SetupAction:
+
+                GetVariableWithGameDifficulty(out int hpToHeal, out int missChance, out int smallShotRate);
+
+                if (curHP <= hpToHeal && GameUIManager.Instance.pigHeal.activeSelf) UseHeal();
+
+                float hitIndex = Random.Range(0, 100f);
+                bool isHit = hitIndex > missChance;
+
+                switch (GameManager.Difficulty)
+                {
+                    case GameDifficulty.Normal:
+                        if (GameUIManager.Instance.pigDoubleAttack.activeSelf &&
+                            !GameManager.Instance.IsWindy())
+                        {
+                            UseDoubleAttack();
+                        }
+                        break;
+                    case GameDifficulty.Hard:
+                        if (GameUIManager.Instance.pigPowerThrow.activeSelf &&
+                            GameManager.Instance.IsWindy())
+                        {
+                            UsePowerThrow();
+                        }
+                        break;
+                }
+
+                if (isHit)
+                {
+                    float smallIndex = Random.Range(0, 100f);
+                    bool isSmallShot = smallIndex < smallShotRate;
+
+                    if (isSmallShot)
+                    {
+                        targetDis = (GameManager.Instance.AuntNextDoor.transform.localPosition.x * 2f) - 1f;
+                    }
+                    else
+                    {
+                        targetDis = (GameManager.Instance.AuntNextDoor.transform.localPosition.x * 2f);
+                    }
+                }
+                else
+                {
+                    float toFarIndex = Random.Range(0, 100f);
+                    bool isFar = toFarIndex > 50f;
+                    if (isFar)
+                    {
+                        float minFarDis = (GameManager.Instance.AuntNextDoor.transform.localPosition.x * 2f) + 1f;
+                        targetDis = Random.Range(minFarDis, GameManager.gameData.MaxDistance);
+                    }
+                    else
+                    {
+                        float maxCloseDis = (GameManager.Instance.AuntNextDoor.transform.localPosition.x * 2f) - 2f;
+                        targetDis = Random.Range(GameManager.gameData.MinDistance, maxCloseDis);
+                    }
+                }
+
+                SwitchState(EnemyState.ChargeToAttack);
+
+                break;
+            case EnemyState.ChargeToAttack:
+
+                GameUIManager.Instance.ShowAttackRate();
+
+                break;
+            case EnemyState.AfterAttack:
+                break;
+        }
+    }
+
+    void GetVariableWithGameDifficulty(out int hpToHeal, out int missChance, out int smallShotRate)
+    {
+        switch (GameManager.Difficulty)
+        {
+            case GameDifficulty.Easy:
+                hpToHeal = GameManager.gameData.EnemyTargetHPToHeal_Easy;
+                missChance = GameManager.gameData.EnemyMissedRate_Easy;
+                smallShotRate = GameManager.gameData.EnemySmallShotRate_Easy;
+                break;
+            case GameDifficulty.Normal:
+                hpToHeal = GameManager.gameData.EnemyTargetHPToHeal_Normal;
+                missChance = GameManager.gameData.EnemyMissedRate_Normal;
+                smallShotRate = GameManager.gameData.EnemySmallShotRate_Normal;
+                break;
+            case GameDifficulty.Hard:
+                hpToHeal = GameManager.gameData.EnemyTargetHPToHeal_Hard;
+                missChance = GameManager.gameData.EnemyMissedRate_Hard;
+                smallShotRate = GameManager.gameData.EnemySmallShotRate_Hard;
+                break;
+            default:
+                hpToHeal = 0;
+                missChance = 0;
+                smallShotRate = 0;
+                break;
+        }
+    }
+
+    void UpdateState()
+    {
+        switch (enemyState)
+        {
+            case EnemyState.SetupAction:
+                break;
+            case EnemyState.ChargeToAttack:
+                curTargetDis += GameManager.gameData.HoldMultiply * Time.deltaTime;
+
+                if (curTargetDis >= targetDis)
+                {
+                    InstantiatBullet(curBullet, targetDis);
+                    GameUIManager.Instance.HideAttackRate();
+                    SwitchState(EnemyState.AfterAttack);
+                }
+                break;
+            case EnemyState.AfterAttack:
+                break;
+        }
+    }
+
     #endregion
 
 }
