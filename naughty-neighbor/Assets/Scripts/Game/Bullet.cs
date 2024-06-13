@@ -49,85 +49,229 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        EnemyManager pigEnemy = GameManager.Instance.RichPig.GetComponent<EnemyManager>();
+        PlayerManager pigPlayer = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
+        PlayerManager auntPlayer = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
+
         if (collision.CompareTag("Ground"))
         {
             AfterHit();
+            if (targetType == Target.Aunt)
+            {
+                if (auntPlayer.isHurt()) auntPlayer.Anim_Play("Happy UnFriendly");
+                else auntPlayer.Anim_Play("Happy Friendly");
+            }
+            else
+            {
+                if (GameManager.IsGameMode(GameMode.SinglePlayer))
+                {
+                    if (pigEnemy.isHurt()) pigEnemy.Anim_Play("Happy UnFriendly");
+                    else pigEnemy.Anim_Play("Happy Friendly");
+                }
+                else
+                {
+                    if (pigPlayer.isHurt()) pigPlayer.Anim_Play("Happy UnFriendly");
+                    else pigPlayer.Anim_Play("Happy Friendly");
+                }
+            }
         }
 
         if (targetType == Target.Pig)
         {
             if (collision.CompareTag("PigSmall"))
             {
+                if (auntPlayer.isHurt()) auntPlayer.Anim_Play("Happy UnFriendly");
+                else auntPlayer.Anim_Play("Happy Friendly");
+
                 AfterHit();
+
                 if (GameManager.IsGameMode(GameMode.SinglePlayer))
                 {
-                    EnemyManager pigEnemy = GameManager.Instance.RichPig.GetComponent<EnemyManager>();
                     if (isPowerThrow)
-                        pigEnemy.TakeDamage(GameManager.gameData.PowerThrowDamage);
+                    {
+                        if (pigEnemy.TakeDamage(GameManager.gameData.PowerThrowDamage))
+                        {
+                            auntPlayer.Anim_Play("Cheer Friendly");
+                        }
+                    }
                     else if (isDoubleAttack)
-                        pigEnemy.TakeDamage(GameManager.gameData.DoubleAttackDamage);
+                    {
+                        if (pigEnemy.TakeDamage(GameManager.gameData.DoubleAttackDamage))
+                        {
+                            auntPlayer.Anim_Play("Cheer Friendly");
+                        }
+                    }
                     else
-                        pigEnemy.TakeDamage(GameManager.gameData.SmallAttackDamage);
+                    {
+                        if (pigEnemy.TakeDamage(GameManager.gameData.SmallAttackDamage))
+                        {
+                            auntPlayer.Anim_Play("Cheer Friendly");
+                        }
+                    }
                 }
                 else
                 {
-                    PlayerManager pigPlayer = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
                     if (isPowerThrow)
-                        pigPlayer.TakeDamage(GameManager.gameData.PowerThrowDamage);
+                    {
+                        if (pigPlayer.TakeDamage(GameManager.gameData.PowerThrowDamage))
+                        {
+                            auntPlayer.Anim_Play("Cheer Friendly");
+                        }
+                    }
                     else if (isDoubleAttack)
-                        pigPlayer.TakeDamage(GameManager.gameData.DoubleAttackDamage);
+                    {
+                        if (pigPlayer.TakeDamage(GameManager.gameData.DoubleAttackDamage))
+                        {
+                            auntPlayer.Anim_Play("Cheer Friendly");
+                        }
+                    }
                     else
-                        pigPlayer.TakeDamage(GameManager.gameData.SmallAttackDamage);
+                    {
+                        if (pigPlayer.TakeDamage(GameManager.gameData.SmallAttackDamage))
+                        {
+                            auntPlayer.Anim_Play("Cheer Friendly");
+                        }
+                    }
                 }
+
             }
             else if (collision.CompareTag("PigNormal"))
             {
+                if (auntPlayer.isHurt()) auntPlayer.Anim_Play("Happy UnFriendly");
+                else auntPlayer.Anim_Play("Happy Friendly");
+
                 AfterHit();
+
                 if (GameManager.IsGameMode(GameMode.SinglePlayer))
                 {
-                    EnemyManager pigEnemy = GameManager.Instance.RichPig.GetComponent<EnemyManager>();
                     if (isPowerThrow)
-                        pigEnemy.TakeDamage(GameManager.gameData.PowerThrowDamage);
+                    {
+                        if (pigEnemy.TakeDamage(GameManager.gameData.PowerThrowDamage))
+                        {
+                            auntPlayer.Anim_Play("Cheer Friendly");
+                        }
+                    }
                     else if (isDoubleAttack)
-                        pigEnemy.TakeDamage(GameManager.gameData.DoubleAttackDamage);
+                    {
+                        if (pigEnemy.TakeDamage(GameManager.gameData.DoubleAttackDamage))
+                        {
+                            auntPlayer.Anim_Play("Cheer Friendly");
+                        }
+                    }
                     else
-                        pigEnemy.TakeDamage(GameManager.gameData.NormalAttackDamage);
+                    {
+                        if (pigEnemy.TakeDamage(GameManager.gameData.NormalAttackDamage))
+                        {
+                            auntPlayer.Anim_Play("Cheer Friendly");
+                        }
+                    }
                 }
                 else
                 {
-                    PlayerManager pigPlayer = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
                     if (isPowerThrow)
-                        pigPlayer.TakeDamage(GameManager.gameData.PowerThrowDamage);
+                    {
+                        if (pigPlayer.TakeDamage(GameManager.gameData.PowerThrowDamage))
+                        {
+                            auntPlayer.Anim_Play("Cheer Friendly");
+                        }
+                    }
                     else if (isDoubleAttack)
-                        pigPlayer.TakeDamage(GameManager.gameData.DoubleAttackDamage);
+                    {
+                        if (pigPlayer.TakeDamage(GameManager.gameData.DoubleAttackDamage))
+                        {
+                            auntPlayer.Anim_Play("Cheer Friendly");
+                        }
+                    }
                     else
-                        pigPlayer.TakeDamage(GameManager.gameData.NormalAttackDamage);
+                    {
+                        if (pigPlayer.TakeDamage(GameManager.gameData.NormalAttackDamage))
+                        {
+                            auntPlayer.Anim_Play("Cheer Friendly");
+                        }
+                    }
                 }
+
             }
         }
         else if (targetType == Target.Aunt)
         {
             if (collision.CompareTag("AuntSmall"))
             {
-                AfterHit();
-                PlayerManager auntPlayer = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
-                if (isPowerThrow)
-                    auntPlayer.TakeDamage(GameManager.gameData.PowerThrowDamage);
-                else if (isDoubleAttack)
-                    auntPlayer.TakeDamage(GameManager.gameData.DoubleAttackDamage);
+                if (GameManager.IsGameMode(GameMode.SinglePlayer))
+                {
+                    if (pigEnemy.isHurt()) pigEnemy.Anim_Play("Happy UnFriendly");
+                    else pigEnemy.Anim_Play("Happy Friendly");
+                }
                 else
-                    auntPlayer.TakeDamage(GameManager.gameData.SmallAttackDamage);
+                {
+                    if (pigPlayer.isHurt()) pigPlayer.Anim_Play("Happy UnFriendly");
+                    else pigPlayer.Anim_Play("Happy Friendly");
+                }
+
+                AfterHit();
+
+                if (isPowerThrow)
+                {
+                    if (auntPlayer.TakeDamage(GameManager.gameData.PowerThrowDamage))
+                    {
+                        SelectPigPlayCheerAnim(pigPlayer, pigEnemy);
+                    }
+                }
+                else if (isDoubleAttack)
+                {
+                    if (auntPlayer.TakeDamage(GameManager.gameData.DoubleAttackDamage))
+                    {
+                        SelectPigPlayCheerAnim(pigPlayer, pigEnemy);
+                    }
+                }
+                else
+                {
+                    if (auntPlayer.TakeDamage(GameManager.gameData.SmallAttackDamage))
+                    {
+                        SelectPigPlayCheerAnim(pigPlayer, pigEnemy);
+                    }
+                }
+
+
+
             }
             else if (collision.CompareTag("AuntNormal"))
             {
-                AfterHit();
-                PlayerManager auntPlayer = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
-                if (isPowerThrow)
-                    auntPlayer.TakeDamage(GameManager.gameData.PowerThrowDamage);
-                else if (isDoubleAttack)
-                    auntPlayer.TakeDamage(GameManager.gameData.DoubleAttackDamage);
+                if (GameManager.IsGameMode(GameMode.SinglePlayer))
+                {
+                    if (pigEnemy.isHurt()) pigEnemy.Anim_Play("Happy UnFriendly");
+                    else pigEnemy.Anim_Play("Happy Friendly");
+                }
                 else
-                    auntPlayer.TakeDamage(GameManager.gameData.NormalAttackDamage);
+                {
+                    if (pigPlayer.isHurt()) pigPlayer.Anim_Play("Happy UnFriendly");
+                    else pigPlayer.Anim_Play("Happy Friendly");
+                }
+
+                AfterHit();
+
+                if (isPowerThrow)
+                {
+                    if (auntPlayer.TakeDamage(GameManager.gameData.PowerThrowDamage))
+                    {
+                        SelectPigPlayCheerAnim(pigPlayer, pigEnemy);
+                    }
+                }
+                else if (isDoubleAttack)
+                {
+                    if (auntPlayer.TakeDamage(GameManager.gameData.DoubleAttackDamage))
+                    {
+                        SelectPigPlayCheerAnim(pigPlayer, pigEnemy);
+                    }
+                }
+                else
+                {
+                    if (auntPlayer.TakeDamage(GameManager.gameData.NormalAttackDamage))
+                    {
+                        SelectPigPlayCheerAnim(pigPlayer, pigEnemy);
+                    }
+                }
+
             }
         }
 
@@ -180,6 +324,18 @@ public class Bullet : MonoBehaviour
                     GameManager.Instance.SwitchToWaitingForNextTurnState(targetType);
                 }
             }
+        }
+    }
+
+    void SelectPigPlayCheerAnim(PlayerManager pigPlayer, EnemyManager pigEnemy)
+    {
+        if (GameManager.IsGameMode(GameMode.SinglePlayer))
+        {
+            pigEnemy.Anim_Play("Cheer Friendly");
+        }
+        else if (GameManager.IsGameMode(GameMode.MultiPlayer))
+        {
+            pigPlayer.Anim_Play("Cheer Friendly");
         }
     }
 

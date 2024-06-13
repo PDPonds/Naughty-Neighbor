@@ -196,7 +196,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8305791146150777606
 RectTransform:
   m_ObjectHideFlags: 0
@@ -407,12 +407,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curHP: 0
   playerState: 0
+  visual: {fileID: 6079456450840626772}
   spawnBulletPoint: {fileID: 2735999915381740243}
   normalBulletPrefab: {fileID: 1424397329751235174, guid: c08812ecf1a11ef438f7eff4365719b7, type: 3}
   curBullet: {fileID: 0}
   curDis: 0
   isHold: 0
   isDecreaseDis: 0
+  isDoubleAttack: 0
 --- !u!114 &114691780700452965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -427,9 +429,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curHP: 0
   curMaxHP: 0
+  visual: {fileID: 6079456450840626772}
   spawnBulletPoint: {fileID: 2735999915381740243}
   normalBulletPrefab: {fileID: 1424397329751235174, guid: c08812ecf1a11ef438f7eff4365719b7, type: 3}
   curBullet: {fileID: 0}
+  targetDis: 0
+  curTargetDis: 0
+  isDoubleAttack: 0
 --- !u!1 &4245145676189690668
 GameObject:
   m_ObjectHideFlags: 0
@@ -687,7 +693,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6902284732615034214
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1102,7 +1108,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8062934323478072928
 RectTransform:
   m_ObjectHideFlags: 0

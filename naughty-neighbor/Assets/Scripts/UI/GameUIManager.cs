@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class GameUIManager : Singleton<GameUIManager>
 {
@@ -197,7 +199,9 @@ public class GameUIManager : Singleton<GameUIManager>
         float maxHp = GameManager.gameData.PlayerHP;
 
         float percent = curHp / maxHp;
-        AuntNextDoorHpFill.fillAmount = percent;
+
+        //AuntNextDoorHpFill.fillAmount = percent;
+        StartCoroutine(LerpAuntNextDoorHpFill(AuntNextDoorHpFill.fillAmount, percent, 0.25f));
     }
 
     public void UpdateRichPigHP()
@@ -209,7 +213,9 @@ public class GameUIManager : Singleton<GameUIManager>
             float maxHp = enemy.curMaxHP;
 
             float percent = curHp / maxHp;
-            RichPigHpFill.fillAmount = percent;
+
+            //RichPigHpFill.fillAmount = percent;
+            StartCoroutine(LerpRichPigHpFill(RichPigHpFill.fillAmount, percent, 0.25f));
         }
         else
         {
@@ -218,8 +224,40 @@ public class GameUIManager : Singleton<GameUIManager>
             float maxHp = GameManager.gameData.PlayerHP;
 
             float percent = curHp / maxHp;
-            RichPigHpFill.fillAmount = percent;
+
+            StartCoroutine(LerpRichPigHpFill(RichPigHpFill.fillAmount, percent, 0.25f));
+            //RichPigHpFill.fillAmount = percent;
         }
+    }
+
+    IEnumerator LerpRichPigHpFill(float startValue, float endValue, float lerpDuration)
+    {
+        float timeElapsed = 0;
+
+        while (timeElapsed < lerpDuration)
+        {
+            RichPigHpFill.fillAmount = Mathf.Lerp(startValue, endValue, timeElapsed / lerpDuration);
+            timeElapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+        RichPigHpFill.fillAmount = endValue;
+    }
+
+    IEnumerator LerpAuntNextDoorHpFill(float startValue, float endValue, float lerpDuration)
+    {
+        float timeElapsed = 0;
+
+        while (timeElapsed < lerpDuration)
+        {
+            AuntNextDoorHpFill.fillAmount = Mathf.Lerp(startValue, endValue, timeElapsed / lerpDuration);
+            timeElapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+        AuntNextDoorHpFill.fillAmount = endValue;
     }
 
     public void UpdateWindArrow(float windForce)
@@ -262,12 +300,13 @@ public class GameUIManager : Singleton<GameUIManager>
         if (GameManager.IsGameMode(GameMode.SinglePlayer))
         {
             PlayerManager player = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
+            EnemyManager enemy = GameManager.Instance.RichPig.GetComponent<EnemyManager>();
+
             if (player.curHP <= 0)
             {
                 winText.text = GameManager.gameData.SinglePlayerLose;
             }
 
-            EnemyManager enemy = GameManager.Instance.RichPig.GetComponent<EnemyManager>();
             if (enemy.curHP <= 0)
             {
                 winText.text = GameManager.gameData.SinglePlayerWin;
@@ -277,12 +316,13 @@ public class GameUIManager : Singleton<GameUIManager>
         else if (GameManager.IsGameMode(GameMode.MultiPlayer))
         {
             PlayerManager aunt = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
+            PlayerManager pig = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
+
             if (aunt.curHP <= 0)
             {
                 winText.text = GameManager.gameData.Player2Win;
             }
 
-            PlayerManager pig = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
             if (pig.curHP <= 0)
             {
                 winText.text = GameManager.gameData.Player1Win;

@@ -17,6 +17,9 @@ public class EnemyManager : Singleton<EnemyManager>
 
     [HideInInspector] public int curHP;
     [HideInInspector] public int curMaxHP;
+    [Header("===== Visual =====")]
+    [SerializeField] GameObject visual;
+    Animator anim;
 
     [Header("===== Attack =====")]
     [SerializeField] Transform spawnBulletPoint;
@@ -26,6 +29,11 @@ public class EnemyManager : Singleton<EnemyManager>
     [HideInInspector] public float curTargetDis;
 
     public bool isDoubleAttack;
+
+    private void Awake()
+    {
+        anim = visual.GetComponent<Animator>();
+    }
 
     private void Start()
     {
@@ -56,30 +64,54 @@ public class EnemyManager : Singleton<EnemyManager>
         GameUIManager.Instance.UpdateRichPigHP();
     }
 
-    public void TakeDamage(int amount)
+    public bool TakeDamage(int amount)
     {
         curHP -= amount;
+
+        if (curHP < GameManager.gameData.PlayerHP / 2)
+        {
+            Anim_Play("Sleep UnFriendly");
+            Anim_SetBool("isHurt", true);
+        }
+        else
+        {
+            Anim_Play("Sleep Friendly");
+        }
+
         if (curHP <= 0)
         {
             Die();
+            return true;
         }
         GameUIManager.Instance.UpdateRichPigHP();
+        return false;
     }
 
     void Die()
     {
+        PlayerManager aunt = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
+        aunt.Anim_Play("Cheer Friendly");
+        Debug.Log("Aunt Cheer");
+        Anim_Play("Moody UnFriendly");
         GameManager.Instance.SwitchGameState(GameState.Winner);
     }
 
     public void Heal(int amount)
     {
         curHP += amount;
+        if (curHP >= GameManager.gameData.PlayerHP / 2) Anim_SetBool("isHurt", false);
         if (curHP > GameManager.gameData.PlayerHP)
         {
             curHP = GameManager.gameData.PlayerHP;
         }
         GameUIManager.Instance.UpdateRichPigHP();
     }
+
+    public bool isHurt()
+    {
+        return curHP <= curMaxHP;
+    }
+
     #endregion
 
     public void SetupNormalBullet()
@@ -105,8 +137,8 @@ public class EnemyManager : Singleton<EnemyManager>
         Heal(GameManager.gameData.Heal);
         GameUIManager.Instance.HideAttackRate();
         GameUIManager.Instance.HideAlertPage();
-        GameManager.Instance.SwitchGameState(GameManager.Instance.GetNextGameState());
         SwitchState(EnemyState.AfterAttack);
+        GameManager.Instance.SwitchGameState(GameManager.Instance.GetNextGameState());
         GameUIManager.Instance.DisableInteractiveButtonAfterUseHeal_Pig();
     }
 
@@ -135,7 +167,11 @@ public class EnemyManager : Singleton<EnemyManager>
 
                 GetVariableWithGameDifficulty(out int hpToHeal, out int missChance, out int smallShotRate);
 
-                if (curHP <= hpToHeal && GameUIManager.Instance.pigHeal.activeSelf) UseHeal();
+                if (curHP <= hpToHeal && GameUIManager.Instance.pigHeal.activeSelf)
+                {
+                    UseHeal();
+                    return;
+                }
 
                 float hitIndex = Random.Range(0, 100f);
                 bool isHit = hitIndex > missChance;
@@ -251,4 +287,13 @@ public class EnemyManager : Singleton<EnemyManager>
 
     #endregion
 
+    public void Anim_Play(string name)
+    {
+        anim.Play(name);
+    }
+
+    public void Anim_SetBool(string variable, bool value)
+    {
+        anim.SetBool(variable, value);
+    }
 }

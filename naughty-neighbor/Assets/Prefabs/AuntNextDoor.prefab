@@ -238,7 +238,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7217990691593927617
 RectTransform:
   m_ObjectHideFlags: 0
@@ -758,7 +758,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7026197588533305306
 RectTransform:
   m_ObjectHideFlags: 0
@@ -940,7 +940,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7378381625755394138
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1127,12 +1127,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curHP: 0
   playerState: 0
+  visual: {fileID: 4267546470923954024}
   spawnBulletPoint: {fileID: 893846713433480722}
   normalBulletPrefab: {fileID: 8696127832279629981, guid: 1e5e729adc3a8b94dbf1c249120d544f, type: 3}
   curBullet: {fileID: 0}
   curDis: 0
   isHold: 0
   isDecreaseDis: 0
+  isDoubleAttack: 0
 --- !u!1 &8405537322067871436
 GameObject:
   m_ObjectHideFlags: 0
