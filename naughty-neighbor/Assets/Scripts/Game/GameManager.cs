@@ -25,7 +25,7 @@ public class GameManager : Singleton<GameManager>
     public AnimationCurve trajectoryAnimationCurve;
 
     [Header("===== Wind =====")]
-    public float curWindForce;
+    [HideInInspector] public float curWindForce;
 
     [Header("===== Bullet =====")]
     public GameObject PowerThrowBullet;
@@ -119,6 +119,7 @@ public class GameManager : Singleton<GameManager>
             case GameState.AuntNextDoor:
 
                 SetupWindForce();
+                GameUIManager.Instance.EnableInteractiveAuntItem();
                 if (IsGameMode(GameMode.MultiPlayer))
                 {
                     EnablePlayerManagerOnGameObject(RichPig, false);
@@ -129,6 +130,7 @@ public class GameManager : Singleton<GameManager>
                 auntPlayer.SetupOnPhaseStart();
                 auntPlayer.curDis = 0;
                 auntPlayer.isHold = false;
+                auntPlayer.curBullet = auntPlayer.normalBulletPrefab;
 
                 DestroyAllBulletInScene();
 
@@ -136,6 +138,7 @@ public class GameManager : Singleton<GameManager>
             case GameState.RichPig:
 
                 SetupWindForce();
+                GameUIManager.Instance.EnableInteractivePigItem();
                 if (IsGameMode(GameMode.MultiPlayer))
                 {
                     EnablePlayerManagerOnGameObject(RichPig, true);
@@ -145,11 +148,13 @@ public class GameManager : Singleton<GameManager>
                     pigPlayer.SetupOnPhaseStart();
                     pigPlayer.curDis = 0;
                     pigPlayer.isHold = false;
+                    pigPlayer.curBullet = pigPlayer.normalBulletPrefab;
                 }
                 else
                 {
                     EnemyManager pigEnemy = RichPig.GetComponent<EnemyManager>();
                     pigEnemy.SetupNormalBullet();
+                    pigEnemy.curBullet = pigEnemy.normalBulletPrefab;
                 }
 
                 DestroyAllBulletInScene();
@@ -224,7 +229,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    GameState GetNextGameState()
+    public GameState GetNextGameState()
     {
         if (IsGameState(GameState.AuntNextDoor)) return GameState.RichPig;
         else if (IsGameState(GameState.RichPig)) return GameState.AuntNextDoor;

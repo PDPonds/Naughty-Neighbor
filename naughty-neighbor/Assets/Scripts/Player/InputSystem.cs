@@ -39,7 +39,6 @@ public class InputSystem : MonoBehaviour
             player.isHold = false;
             player.InstantiatBullet(player.curBullet);
             GameUIManager.Instance.HideAttackRate();
-            player.curDis = 0;
             player.SwitchState(PlayerState.AfterAttack);
         }
     }

@@ -15,13 +15,13 @@ public class PlayerManager : MonoBehaviour
 
     [Header("===== Attack =====")]
     [SerializeField] Transform spawnBulletPoint;
-    [SerializeField] GameObject normalBulletPrefab;
+    public GameObject normalBulletPrefab;
     [HideInInspector] public GameObject curBullet;
     [HideInInspector] public float curDis;
     [HideInInspector] public bool isHold;
     [HideInInspector] public bool isDecreaseDis;
 
-    bool isDoubleAttack;
+    [HideInInspector] public bool isDoubleAttack;
 
     private void Start()
     {
@@ -104,6 +104,7 @@ public class PlayerManager : MonoBehaviour
 
     public void InstantiatBullet(GameObject bulletPrefab)
     {
+
         GameObject bulletObj = Instantiate(bulletPrefab, spawnBulletPoint.position, Quaternion.identity);
         Bullet bullet = bulletObj.GetComponent<Bullet>();
 
@@ -113,7 +114,10 @@ public class PlayerManager : MonoBehaviour
         else if (GameManager.Instance.IsGameState(GameState.AuntNextDoor))
             target = transform.position - new Vector3(curDis + GameManager.Instance.curWindForce, 0, 0);
 
-        bullet.OnSetupBullet(target);
+        if (GameManager.Instance.IsGameState(GameState.AuntNextDoor))
+            bullet.OnSetupBullet(target, Target.Pig);
+        else if (GameManager.Instance.IsGameState(GameState.RichPig))
+            bullet.OnSetupBullet(target, Target.Aunt);
     }
 
     #region Player State

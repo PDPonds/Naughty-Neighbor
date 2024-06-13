@@ -18,19 +18,8 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "ff1e3660-e78b-4527-8e36-b8b6a51c6088",
-                    "path": "<Touchscreen>/primaryTouch/press",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Press",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "d7584189-30b1-484b-8f08-765cb6af4062",
-                    "path": "<Mouse>/press",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

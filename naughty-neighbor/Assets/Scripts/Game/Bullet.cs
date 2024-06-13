@@ -9,8 +9,9 @@ public class Bullet : MonoBehaviour
     Rigidbody2D rb;
     CircleCollider2D circleCollider;
 
-    [SerializeField] Target targetType;
+    Target targetType;
     Vector3 target;
+    [SerializeField] bool isPowerThrow;
 
     private void Awake()
     {
@@ -38,9 +39,10 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    public void OnSetupBullet(Vector3 target)
+    public void OnSetupBullet(Vector3 targetPoint, Target targetType)
     {
-        this.target = target;
+        target = targetPoint;
+        this.targetType = targetType;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -58,12 +60,18 @@ public class Bullet : MonoBehaviour
                 if (GameManager.IsGameMode(GameMode.SinglePlayer))
                 {
                     EnemyManager pigEnemy = GameManager.Instance.RichPig.GetComponent<EnemyManager>();
-                    pigEnemy.TakeDamage(GameManager.gameData.SmallAttack);
+                    if (isPowerThrow)
+                        pigEnemy.TakeDamage(GameManager.gameData.PowerThrow);
+                    else
+                        pigEnemy.TakeDamage(GameManager.gameData.SmallAttack);
                 }
                 else
                 {
                     PlayerManager pigPlayer = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
-                    pigPlayer.TakeDamage(GameManager.gameData.SmallAttack);
+                    if (isPowerThrow)
+                        pigPlayer.TakeDamage(GameManager.gameData.PowerThrow);
+                    else
+                        pigPlayer.TakeDamage(GameManager.gameData.SmallAttack);
                 }
             }
             else if (collision.CompareTag("PigNormal"))
@@ -72,12 +80,18 @@ public class Bullet : MonoBehaviour
                 if (GameManager.IsGameMode(GameMode.SinglePlayer))
                 {
                     EnemyManager pigEnemy = GameManager.Instance.RichPig.GetComponent<EnemyManager>();
-                    pigEnemy.TakeDamage(GameManager.gameData.NormalAttack);
+                    if (isPowerThrow)
+                        pigEnemy.TakeDamage(GameManager.gameData.PowerThrow);
+                    else
+                        pigEnemy.TakeDamage(GameManager.gameData.NormalAttack);
                 }
                 else
                 {
                     PlayerManager pigPlayer = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
-                    pigPlayer.TakeDamage(GameManager.gameData.NormalAttack);
+                    if (isPowerThrow)
+                        pigPlayer.TakeDamage(GameManager.gameData.PowerThrow);
+                    else
+                        pigPlayer.TakeDamage(GameManager.gameData.NormalAttack);
                 }
             }
         }
@@ -87,13 +101,19 @@ public class Bullet : MonoBehaviour
             {
                 AfterHit();
                 PlayerManager auntPlayer = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
-                auntPlayer.TakeDamage(GameManager.gameData.SmallAttack);
+                if (isPowerThrow)
+                    auntPlayer.TakeDamage(GameManager.gameData.PowerThrow);
+                else
+                    auntPlayer.TakeDamage(GameManager.gameData.SmallAttack);
             }
             else if (collision.CompareTag("AuntNormal"))
             {
                 AfterHit();
                 PlayerManager auntPlayer = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
-                auntPlayer.TakeDamage(GameManager.gameData.NormalAttack);
+                if (isPowerThrow)
+                    auntPlayer.TakeDamage(GameManager.gameData.PowerThrow);
+                else
+                    auntPlayer.TakeDamage(GameManager.gameData.NormalAttack);
             }
         }
 
@@ -104,7 +124,49 @@ public class Bullet : MonoBehaviour
         circleCollider.isTrigger = false;
         rb.gravityScale = 1;
         rb.AddForce(Vector2.up, ForceMode2D.Impulse);
-        GameManager.Instance.SwitchToWaitingForNextTurnState(targetType);
+
+        if (targetType == Target.Pig)
+        {
+            PlayerManager auntPlayer = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
+            if (auntPlayer.isDoubleAttack)
+            {
+                auntPlayer.InstantiatBullet(auntPlayer.curBullet);
+                auntPlayer.isDoubleAttack = false;
+            }
+            else
+            {
+                GameManager.Instance.SwitchToWaitingForNextTurnState(targetType);
+            }
+        }
+        else if (targetType == Target.Aunt)
+        {
+            if (GameManager.IsGameMode(GameMode.SinglePlayer))
+            {
+                EnemyManager enemy = GameManager.Instance.RichPig.GetComponent<EnemyManager>();
+                if (enemy.isDoubleAttack)
+                {
+                    enemy.InstantiatBullet(enemy.curBullet);
+                    enemy.isDoubleAttack = false;
+                }
+                else
+                {
+                    GameManager.Instance.SwitchToWaitingForNextTurnState(targetType);
+                }
+            }
+            else if (GameManager.IsGameMode(GameMode.MultiPlayer))
+            {
+                PlayerManager pigPlayer = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
+                if (pigPlayer.isDoubleAttack)
+                {
+                    pigPlayer.InstantiatBullet(pigPlayer.curBullet);
+                    pigPlayer.isDoubleAttack = false;
+                }
+                else
+                {
+                    GameManager.Instance.SwitchToWaitingForNextTurnState(targetType);
+                }
+            }
+        }
     }
 
 }

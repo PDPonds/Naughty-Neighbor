@@ -9,10 +9,10 @@ public class EnemyManager : Singleton<EnemyManager>
 
     [Header("===== Attack =====")]
     [SerializeField] Transform spawnBulletPoint;
-    [SerializeField] GameObject normalBulletPrefab;
+    public GameObject normalBulletPrefab;
     [HideInInspector] public GameObject curBullet;
 
-    bool isDoubleAttack;
+    public bool isDoubleAttack;
 
     private void Start()
     {
@@ -69,14 +69,37 @@ public class EnemyManager : Singleton<EnemyManager>
         curBullet = normalBulletPrefab;
     }
 
-    //public void InstantiatBullet(GameObject bulletPrefab)
-    //{
-    //    GameObject bulletObj = Instantiate(bulletPrefab, spawnBulletPoint.position, Quaternion.identity);
-    //    Bullet bullet = bulletObj.GetComponent<Bullet>();
+    public void InstantiatBullet(GameObject bulletPrefab)
+    {
+        GameObject bulletObj = Instantiate(bulletPrefab, spawnBulletPoint.position, Quaternion.identity);
+        Bullet bullet = bulletObj.GetComponent<Bullet>();
 
-    //    Vector3 target = transform.position + new Vector3(curDis, 0, 0);
+        //Vector3 target = transform.position + new Vector3(curDis, 0, 0);
+        //bullet.OnSetupBullet(target);
+    }
 
-    //    bullet.OnSetupBullet(target);
-    //}
+    #region Item
+    void UseHeal()
+    {
+        Heal(GameManager.gameData.Heal);
+        GameUIManager.Instance.HideAttackRate();
+        GameUIManager.Instance.HideAlertPage();
+        GameManager.Instance.SwitchGameState(GameManager.Instance.GetNextGameState());
+        GameUIManager.Instance.DisableInteractiveButtonAfterUseHeal_Pig();
+    }
+
+    void UseDoubleAttack()
+    {
+        isDoubleAttack = true;
+        GameUIManager.Instance.DisableInteractiveButtonAfterUseDoubleAttack_Pig();
+    }
+
+    void UsePowerThrow()
+    {
+        curBullet = GameManager.Instance.PowerThrowBullet;
+        GameUIManager.Instance.DisableInteractiveButtonAfterUsePowerThrow_Pig();
+
+    }
+    #endregion
 
 }

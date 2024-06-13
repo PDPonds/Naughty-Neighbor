@@ -44,6 +44,16 @@ public class GameUIManager : Singleton<GameUIManager>
     [SerializeField] Button shareButton;
     [SerializeField] Button homeButton;
 
+    [Header("===== Item =====")]
+    [Header("- Aunt Next Door")]
+    [SerializeField] Button auntHeal;
+    [SerializeField] Button auntDoubleAttack;
+    [SerializeField] Button auntPowerThrow;
+    [Header("- RichPig")]
+    public GameObject pigHeal;
+    public GameObject pigDoubleAttack;
+    public GameObject pigPowerThrow;
+
     private void OnEnable()
     {
         GameManager.Instance.OnSetupWindForce += UpdateWindArrow;
@@ -51,9 +61,22 @@ public class GameUIManager : Singleton<GameUIManager>
 
     private void Start()
     {
+        EnablePigItem();
+
         replayButton.onClick.AddListener(Replay);
         shareButton.onClick.AddListener(Share);
         homeButton.onClick.AddListener(Home);
+
+        auntHeal.onClick.AddListener(AuntHeal);
+        auntDoubleAttack.onClick.AddListener(AuntDoubleAttack);
+        auntPowerThrow.onClick.AddListener(AuntPowerThrow);
+
+        Button pHeal = pigHeal.GetComponent<Button>();
+        pHeal.onClick.AddListener(PigHeal);
+        Button pDoubleAttack = pigDoubleAttack.GetComponent<Button>();
+        pDoubleAttack.onClick.AddListener(PigDoubleAttack);
+        Button pPowerThrow = pigPowerThrow.GetComponent<Button>();
+        pPowerThrow.onClick.AddListener(PigPowerThrow);
     }
 
     private void Update()
@@ -286,6 +309,141 @@ public class GameUIManager : Singleton<GameUIManager>
     {
         SceneManager.LoadScene(0);
     }
+    #endregion
+
+    #region Item
+
+    void EnablePigItem()
+    {
+        if (GameManager.IsGameMode(GameMode.SinglePlayer))
+        {
+            Button heal = pigHeal.GetComponent<Button>();
+            Button dba = pigDoubleAttack.GetComponent<Button>();
+            Button pt = pigPowerThrow.GetComponent<Button>();
+
+            heal.enabled = false;
+            dba.enabled = false;
+            pt.enabled = false;
+        }
+        else
+        {
+            Button heal = pigHeal.GetComponent<Button>();
+            Button dba = pigDoubleAttack.GetComponent<Button>();
+            Button pt = pigPowerThrow.GetComponent<Button>();
+
+            heal.enabled = true;
+            dba.enabled = true;
+            pt.enabled = true;
+        }
+    }
+
+    void AuntHeal()
+    {
+        if (GameManager.Instance.IsGameState(GameState.AuntNextDoor))
+        {
+            PlayerManager player = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
+            player.Heal(GameManager.gameData.Heal);
+            HideAttackRate();
+            HideAlertPage();
+            GameManager.Instance.SwitchGameState(GameManager.Instance.GetNextGameState());
+            auntHeal.gameObject.SetActive(false);
+            auntDoubleAttack.interactable = false;
+            auntPowerThrow.interactable = false;
+        }
+    }
+
+    void PigHeal()
+    {
+        if (GameManager.Instance.IsGameState(GameState.RichPig))
+        {
+            PlayerManager player = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
+            player.Heal(GameManager.gameData.Heal);
+            HideAttackRate();
+            HideAlertPage();
+            GameManager.Instance.SwitchGameState(GameManager.Instance.GetNextGameState());
+            DisableInteractiveButtonAfterUseHeal_Pig();
+        }
+    }
+
+    void AuntDoubleAttack()
+    {
+        if (GameManager.Instance.IsGameState(GameState.AuntNextDoor))
+        {
+            PlayerManager player = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
+            player.isDoubleAttack = true;
+            auntDoubleAttack.gameObject.SetActive(false);
+            auntHeal.interactable = false;
+            auntPowerThrow.interactable = false;
+        }
+    }
+
+    void PigDoubleAttack()
+    {
+        if (GameManager.Instance.IsGameState(GameState.RichPig))
+        {
+            PlayerManager player = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
+            player.isDoubleAttack = true;
+            DisableInteractiveButtonAfterUseDoubleAttack_Pig();
+        }
+    }
+
+    void AuntPowerThrow()
+    {
+        if (GameManager.Instance.IsGameState(GameState.AuntNextDoor))
+        {
+            PlayerManager player = GameManager.Instance.AuntNextDoor.GetComponent<PlayerManager>();
+            player.curBullet = GameManager.Instance.PowerThrowBullet;
+            auntPowerThrow.gameObject.SetActive(false);
+            auntHeal.interactable = false;
+            auntDoubleAttack.interactable = false;
+        }
+    }
+
+    void PigPowerThrow()
+    {
+        if (GameManager.Instance.IsGameState(GameState.RichPig))
+        {
+            PlayerManager player = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
+            player.curBullet = GameManager.Instance.PowerThrowBullet;
+            DisableInteractiveButtonAfterUsePowerThrow_Pig();
+        }
+    }
+
+    public void DisableInteractiveButtonAfterUseHeal_Pig()
+    {
+        pigHeal.gameObject.SetActive(false);
+        pigDoubleAttack.GetComponent<Button>().interactable = false;
+        pigPowerThrow.GetComponent<Button>().interactable = false;
+    }
+
+    public void DisableInteractiveButtonAfterUseDoubleAttack_Pig()
+    {
+        pigDoubleAttack.gameObject.SetActive(false);
+        pigHeal.GetComponent<Button>().interactable = false;
+        pigPowerThrow.GetComponent<Button>().interactable = false;
+    }
+
+    public void DisableInteractiveButtonAfterUsePowerThrow_Pig()
+    {
+        pigPowerThrow.gameObject.SetActive(false);
+        pigHeal.GetComponent<Button>().interactable = false;
+        pigDoubleAttack.GetComponent<Button>().interactable = false;
+    }
+
+    public void EnableInteractiveAuntItem()
+    {
+        auntHeal.interactable = true;
+        auntDoubleAttack.interactable = true;
+        auntPowerThrow.interactable = true;
+    }
+
+    public void EnableInteractivePigItem()
+    {
+        pigHeal.GetComponent<Button>().interactable = true;
+        pigDoubleAttack.GetComponent<Button>().interactable = true;
+        pigPowerThrow.GetComponent<Button>().interactable = true;
+    }
+
     #endregion
 
 }
