@@ -348,16 +348,20 @@ public class GameUIManager : Singleton<GameUIManager>
     #region Button
     void Replay()
     {
+        SoundManager.Instance.PlayOnShot("Button");
+
         SceneManager.LoadScene(1);
     }
 
     void Share()
     {
+        SoundManager.Instance.PlayOnShot("Button");
 
     }
 
     void Home()
     {
+        SoundManager.Instance.PlayOnShot("Button");
         SceneManager.LoadScene(0);
     }
     #endregion
@@ -400,6 +404,8 @@ public class GameUIManager : Singleton<GameUIManager>
             auntHeal.gameObject.SetActive(false);
             auntDoubleAttack.interactable = false;
             auntPowerThrow.interactable = false;
+            SoundManager.Instance.PlayOnShot("Button");
+
         }
     }
 
@@ -413,6 +419,8 @@ public class GameUIManager : Singleton<GameUIManager>
             HideAlertPage();
             GameManager.Instance.SwitchGameState(GameManager.Instance.GetNextGameState());
             DisableInteractiveButtonAfterUseHeal_Pig();
+            SoundManager.Instance.PlayOnShot("Button");
+
         }
     }
 
@@ -425,6 +433,8 @@ public class GameUIManager : Singleton<GameUIManager>
             auntDoubleAttack.gameObject.SetActive(false);
             auntHeal.interactable = false;
             auntPowerThrow.interactable = false;
+            SoundManager.Instance.PlayOnShot("Button");
+
         }
     }
 
@@ -435,6 +445,8 @@ public class GameUIManager : Singleton<GameUIManager>
             PlayerManager player = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
             player.isDoubleAttack = true;
             DisableInteractiveButtonAfterUseDoubleAttack_Pig();
+            SoundManager.Instance.PlayOnShot("Button");
+
         }
     }
 
@@ -447,6 +459,8 @@ public class GameUIManager : Singleton<GameUIManager>
             auntPowerThrow.gameObject.SetActive(false);
             auntHeal.interactable = false;
             auntDoubleAttack.interactable = false;
+            SoundManager.Instance.PlayOnShot("Button");
+
         }
     }
 
@@ -457,6 +471,8 @@ public class GameUIManager : Singleton<GameUIManager>
             PlayerManager player = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
             player.curBullet = GameManager.Instance.PowerThrowBullet;
             DisableInteractiveButtonAfterUsePowerThrow_Pig();
+            SoundManager.Instance.PlayOnShot("Button");
+
         }
     }
 
@@ -508,6 +524,8 @@ public class GameUIManager : Singleton<GameUIManager>
             Scale(settingBorder, Vector3.one, 0.25f);
         }
         isSettingOpen = !isSettingOpen;
+        SoundManager.Instance.PlayOnShot("Button");
+
     }
 
     void Scale(GameObject go, Vector3 scale, float time)

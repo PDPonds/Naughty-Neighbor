@@ -14,6 +14,11 @@ public class SoundManager : Singleton<SoundManager>
         DontDestroyOnLoad(this);
     }
 
+    private void Start()
+    {
+        Play("BGM");
+    }
+
     void GeneratAudioSource()
     {
         foreach (Sound s in sounds)
