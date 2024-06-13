@@ -56,6 +56,11 @@ public class GameUIManager : Singleton<GameUIManager>
     public GameObject pigDoubleAttack;
     public GameObject pigPowerThrow;
 
+    [Header("===== Setting =====")]
+    [SerializeField] GameObject settingBorder;
+    [SerializeField] Button settingButton;
+    bool isSettingOpen;
+
     private void OnEnable()
     {
         GameManager.Instance.OnSetupWindForce += UpdateWindArrow;
@@ -72,6 +77,8 @@ public class GameUIManager : Singleton<GameUIManager>
         auntHeal.onClick.AddListener(AuntHeal);
         auntDoubleAttack.onClick.AddListener(AuntDoubleAttack);
         auntPowerThrow.onClick.AddListener(AuntPowerThrow);
+
+        settingButton.onClick.AddListener(Setting);
 
         Button pHeal = pigHeal.GetComponent<Button>();
         pHeal.onClick.AddListener(PigHeal);
@@ -489,5 +496,23 @@ public class GameUIManager : Singleton<GameUIManager>
     }
 
     #endregion
+
+    void Setting()
+    {
+        if (isSettingOpen)
+        {
+            Scale(settingBorder, Vector3.zero, 0.25f);
+        }
+        else
+        {
+            Scale(settingBorder, Vector3.one, 0.25f);
+        }
+        isSettingOpen = !isSettingOpen;
+    }
+
+    void Scale(GameObject go, Vector3 scale, float time)
+    {
+        LeanTween.scale(go, scale, time).setEaseInOutCubic();
+    }
 
 }

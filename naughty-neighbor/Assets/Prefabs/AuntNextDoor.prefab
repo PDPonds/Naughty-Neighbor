@@ -934,6 +934,7 @@ GameObject:
   - component: {fileID: 7378381625755394138}
   - component: {fileID: 4982635483302812888}
   - component: {fileID: 7429714431231488224}
+  - component: {fileID: 7412084365284950053}
   m_Layer: 0
   m_Name: TurnInfo
   m_TagString: Untagged
@@ -1000,6 +1001,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!95 &7412084365284950053
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7022552470230026884}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4f1d3bbc75df56a41a0b7ed0bdb75ada, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8052182696296009299
 GameObject:
   m_ObjectHideFlags: 0

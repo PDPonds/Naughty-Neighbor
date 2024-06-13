@@ -44,6 +44,11 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
     [SerializeField] Button normalModeButton;
     [SerializeField] Button hardModeButton;
 
+    [Header("===== Sound Setting =====")]
+    [SerializeField] GameObject settingBorder;
+    [SerializeField] Button settingButton;
+    bool isSettingOpen;
+
     LoginManager loginManager;
 
     private void Awake()
@@ -60,6 +65,7 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
         easyModeButton.onClick.AddListener(SelectEasyMode);
         normalModeButton.onClick.AddListener(SelectNormalMode);
         hardModeButton.onClick.AddListener(SelectHardMode);
+        settingButton.onClick.AddListener(Setting);
     }
 
     private void Start()
@@ -164,10 +170,24 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
 
     #endregion
 
+    void Setting()
+    {
+        if (isSettingOpen)
+        {
+            Scale(settingBorder, Vector3.zero, 0.25f);
+        }
+        else
+        {
+            Scale(settingBorder, Vector3.one, 0.25f);
+        }
+        isSettingOpen = !isSettingOpen;
+    }
+
     void Scale(GameObject go, Vector3 scale, float time)
     {
         LeanTween.scale(go, scale, time).setEaseInOutCubic();
     }
+
     void Scale(GameObject go, Vector3 scale, float time, System.Action callback)
     {
         LeanTween.scale(go, scale, time).setEaseInOutCubic()
