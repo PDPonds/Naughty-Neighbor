@@ -5,10 +5,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class MainMenuUIManager : Singleton<MainMenuUIManager>
 {
-
+    [SerializeField] GameObject gameName;
     [Header("===== Login Page =====")]
     [SerializeField] GameObject loginPage;
     [SerializeField] Button loginWithGoogleButton;
@@ -17,6 +18,7 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
     [Header("===== Menu Page =====")]
     [SerializeField] GameObject menuPage;
     [Header("- User Profile")]
+    [SerializeField] GameObject userParent;
     [SerializeField] Image userProfile;
     [SerializeField] TextMeshProUGUI userName;
     [Header("- Button")]
@@ -60,13 +62,23 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
         hardModeButton.onClick.AddListener(SelectHardMode);
     }
 
+    private void Start()
+    {
+        Scale(gameName, Vector3.one, 0.5f);
+        Scale(loginAsGuestButton.gameObject, Vector3.one, 0.5f);
+        Scale(loginWithGoogleButton.gameObject, Vector3.one, 0.5f);
+
+    }
+
     #region Login Page
     async void LoginAsGuest()
     {
         await loginManager.SinginAnonymous();
         loginPage.SetActive(false);
         menuPage.SetActive(true);
-
+        Scale(howToPlayButton.gameObject, Vector3.one, 0.5f);
+        Scale(startGameButton.gameObject, Vector3.one, 0.5f);
+        Scale(userParent, Vector3.one, 0.5f);
     }
     #endregion
 
@@ -75,11 +87,13 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
     void HowToPlay()
     {
         howToPlayPage.SetActive(true);
+        Scale(howToPlayBorder, Vector3.one, 0.5f);
     }
 
     private void StartGame()
     {
         selectModePage.SetActive(true);
+        Scale(selectModeBorder, Vector3.one, 0.5f);
     }
 
     #endregion
@@ -88,7 +102,11 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
 
     void CloseHowToPlay()
     {
-        howToPlayPage.SetActive(false);
+
+        Scale(howToPlayBorder, Vector3.zero, 0.5f, () =>
+        {
+            howToPlayPage.SetActive(false);
+        });
     }
 
     #endregion
@@ -97,12 +115,16 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
 
     void CloseSelectMode()
     {
-        selectModePage.SetActive(false);
+        Scale(selectModeBorder, Vector3.zero, 0.5f, () =>
+        {
+            selectModePage.SetActive(false);
+        });
     }
 
     void SelectSinglePlayer()
     {
         selectDifficultyPage.SetActive(true);
+        Scale(selectDifficultyBorder, Vector3.one, 0.5f);
     }
 
     void SelectMultiPlayer()
@@ -134,9 +156,21 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
 
     void CloseSelectDifficulty()
     {
-        selectDifficultyPage.SetActive(false);
+        Scale(selectDifficultyBorder, Vector3.zero, 0.5f, () =>
+        {
+            selectDifficultyPage.SetActive(false);
+        });
     }
 
     #endregion
 
+    void Scale(GameObject go, Vector3 scale, float time)
+    {
+        LeanTween.scale(go, scale, time).setEaseInOutCubic();
+    }
+    void Scale(GameObject go, Vector3 scale, float time, System.Action callback)
+    {
+        LeanTween.scale(go, scale, time).setEaseInOutCubic()
+            .setOnComplete(() => callback.Invoke());
+    }
 }
