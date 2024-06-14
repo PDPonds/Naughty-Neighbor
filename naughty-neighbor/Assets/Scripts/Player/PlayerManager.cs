@@ -79,13 +79,12 @@ public class PlayerManager : MonoBehaviour
             Anim_Play("Sleep Friendly");
         }
 
-        UpdateHPInfo();
-
         if (curHP <= 0)
         {
             Die();
             return true;
         }
+        UpdateHPInfo();
 
         return false;
     }

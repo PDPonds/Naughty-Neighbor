@@ -78,13 +78,12 @@ public class EnemyManager : Singleton<EnemyManager>
             Anim_Play("Sleep Friendly");
         }
 
-        GameUIManager.Instance.UpdateRichPigHP();
-
         if (curHP <= 0)
         {
             Die();
             return true;
         }
+        GameUIManager.Instance.UpdateRichPigHP();
         return false;
     }
 
