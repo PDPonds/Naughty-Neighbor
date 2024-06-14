@@ -304,6 +304,8 @@ public class GameUIManager : Singleton<GameUIManager>
         endGamePage.SetActive(true);
         SetupWinLoseText();
         SetupGameTime();
+        settingButton.gameObject.SetActive(false);
+        settingBorder.gameObject.SetActive(false);
     }
 
     public void SetupWinLoseText()
@@ -316,11 +318,13 @@ public class GameUIManager : Singleton<GameUIManager>
             if (player.curHP <= 0)
             {
                 winText.text = GameManager.gameData.SinglePlayerLose;
+                SoundManager.Instance.PlayOneShot("Defeat");
             }
 
             if (enemy.curHP <= 0)
             {
                 winText.text = GameManager.gameData.SinglePlayerWin;
+                SoundManager.Instance.PlayOneShot("Victory");
             }
 
         }
@@ -338,6 +342,8 @@ public class GameUIManager : Singleton<GameUIManager>
             {
                 winText.text = GameManager.gameData.Player1Win;
             }
+
+            SoundManager.Instance.PlayOneShot("Victory");
 
         }
     }
