@@ -6,6 +6,7 @@ using Unity.Services.Authentication;
 using System.Threading.Tasks;
 using UnityEngine.UI;
 using System;
+using TMPro;
 
 public class LoginManager : MonoBehaviour
 {
@@ -21,13 +22,28 @@ public class LoginManager : MonoBehaviour
         try
         {
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            userName = $"Player:{AuthenticationService.Instance.PlayerId}";
+            string id = GetUserName(AuthenticationService.Instance.PlayerId, 5).ArrayToString();
+            userName = $"Guest:{id}";
         }
         catch (AuthenticationException ex)
         {
             Debug.LogException(ex);
         }
 
+    }
+
+    char[] GetUserName(string userName, int textCount)
+    {
+        List<char> result = new List<char>();
+
+        char[] allName = userName.ToCharArray();
+        for (int i = 0; i < textCount; i++)
+        {
+            result.Add(allName[i]);
+        }
+
+        char[] chars = result.ToArray();
+        return chars;
     }
 
 }

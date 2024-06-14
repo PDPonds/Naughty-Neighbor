@@ -80,6 +80,7 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
     async void LoginAsGuest()
     {
         await loginManager.SinginAnonymous();
+        userName.text = LoginManager.userName;
         loginPage.SetActive(false);
         menuPage.SetActive(true);
         Scale(howToPlayButton.gameObject, Vector3.one, 0.5f);
