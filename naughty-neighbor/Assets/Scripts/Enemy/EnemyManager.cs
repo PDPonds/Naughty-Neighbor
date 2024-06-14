@@ -126,9 +126,11 @@ public class EnemyManager : Singleton<EnemyManager>
 
         Vector3 target = Vector3.zero;
         if (GameManager.Instance.IsGameState(GameState.RichPig))
-            target = transform.position + new Vector3(this.targetDis, 0, 0);
+            target = transform.position + new Vector3(targetDis, 0, 0);
 
         bullet.OnSetupBullet(target, Target.Aunt, isDoubleAttack);
+
+        SoundManager.Instance.PlayOneShot("Throw");
     }
 
     #region Item
@@ -140,12 +142,18 @@ public class EnemyManager : Singleton<EnemyManager>
         SwitchState(EnemyState.AfterAttack);
         GameManager.Instance.SwitchGameState(GameManager.Instance.GetNextGameState());
         GameUIManager.Instance.DisableInteractiveButtonAfterUseHeal_Pig();
+
+        Button healBut = GameUIManager.Instance.pigHeal.GetComponent<Button>();
+        GameUIManager.Instance.ShowPigItemInfo(healBut.image.sprite);
     }
 
     void UseDoubleAttack()
     {
         isDoubleAttack = true;
         GameUIManager.Instance.DisableInteractiveButtonAfterUseDoubleAttack_Pig();
+
+        Button doubleAttackBut = GameUIManager.Instance.pigDoubleAttack.GetComponent<Button>();
+        GameUIManager.Instance.ShowPigItemInfo(doubleAttackBut.image.sprite);
     }
 
     void UsePowerThrow()
@@ -153,6 +161,8 @@ public class EnemyManager : Singleton<EnemyManager>
         curBullet = GameManager.Instance.PowerThrowBullet;
         GameUIManager.Instance.DisableInteractiveButtonAfterUsePowerThrow_Pig();
 
+        Button powerThrowBut = GameUIManager.Instance.pigPowerThrow.GetComponent<Button>();
+        GameUIManager.Instance.ShowPigItemInfo(powerThrowBut.image.sprite);
     }
     #endregion
 
@@ -229,6 +239,7 @@ public class EnemyManager : Singleton<EnemyManager>
                 break;
             case EnemyState.ChargeToAttack:
 
+                SoundManager.Instance.PlayOneShot("Pull");
                 GameUIManager.Instance.ShowAttackRate();
 
                 break;

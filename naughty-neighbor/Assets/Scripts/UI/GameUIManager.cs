@@ -51,10 +51,14 @@ public class GameUIManager : Singleton<GameUIManager>
     [SerializeField] Button auntHeal;
     [SerializeField] Button auntDoubleAttack;
     [SerializeField] Button auntPowerThrow;
+    [SerializeField] GameObject auntUseItemInfo;
+    [SerializeField] Image auntUseItemImage;
     [Header("- RichPig")]
     public GameObject pigHeal;
     public GameObject pigDoubleAttack;
     public GameObject pigPowerThrow;
+    [SerializeField] GameObject pigUseItemInfo;
+    [SerializeField] Image pigUseItemImage;
 
     [Header("===== Setting =====")]
     [SerializeField] GameObject settingBorder;
@@ -348,20 +352,20 @@ public class GameUIManager : Singleton<GameUIManager>
     #region Button
     void Replay()
     {
-        SoundManager.Instance.PlayOnShot("Button");
+        SoundManager.Instance.PlayOneShot("Button");
 
         SceneManager.LoadScene(1);
     }
 
     void Share()
     {
-        SoundManager.Instance.PlayOnShot("Button");
+        SoundManager.Instance.PlayOneShot("Button");
 
     }
 
     void Home()
     {
-        SoundManager.Instance.PlayOnShot("Button");
+        SoundManager.Instance.PlayOneShot("Button");
         SceneManager.LoadScene(0);
     }
     #endregion
@@ -400,12 +404,12 @@ public class GameUIManager : Singleton<GameUIManager>
             player.Heal(GameManager.gameData.Heal);
             HideAttackRate();
             HideAlertPage();
+            ShowAuntItemInfo(auntHeal.image.sprite);
             GameManager.Instance.SwitchGameState(GameManager.Instance.GetNextGameState());
             auntHeal.gameObject.SetActive(false);
             auntDoubleAttack.interactable = false;
             auntPowerThrow.interactable = false;
-            SoundManager.Instance.PlayOnShot("Button");
-
+            SoundManager.Instance.PlayOneShot("Button");
         }
     }
 
@@ -417,9 +421,10 @@ public class GameUIManager : Singleton<GameUIManager>
             player.Heal(GameManager.gameData.Heal);
             HideAttackRate();
             HideAlertPage();
+            ShowPigItemInfo(pigHeal.GetComponent<Button>().image.sprite);
             GameManager.Instance.SwitchGameState(GameManager.Instance.GetNextGameState());
             DisableInteractiveButtonAfterUseHeal_Pig();
-            SoundManager.Instance.PlayOnShot("Button");
+            SoundManager.Instance.PlayOneShot("Button");
 
         }
     }
@@ -433,8 +438,8 @@ public class GameUIManager : Singleton<GameUIManager>
             auntDoubleAttack.gameObject.SetActive(false);
             auntHeal.interactable = false;
             auntPowerThrow.interactable = false;
-            SoundManager.Instance.PlayOnShot("Button");
-
+            SoundManager.Instance.PlayOneShot("Button");
+            ShowAuntItemInfo(auntDoubleAttack.image.sprite);
         }
     }
 
@@ -445,8 +450,8 @@ public class GameUIManager : Singleton<GameUIManager>
             PlayerManager player = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
             player.isDoubleAttack = true;
             DisableInteractiveButtonAfterUseDoubleAttack_Pig();
-            SoundManager.Instance.PlayOnShot("Button");
-
+            SoundManager.Instance.PlayOneShot("Button");
+            ShowPigItemInfo(pigDoubleAttack.GetComponent<Button>().image.sprite);
         }
     }
 
@@ -459,8 +464,8 @@ public class GameUIManager : Singleton<GameUIManager>
             auntPowerThrow.gameObject.SetActive(false);
             auntHeal.interactable = false;
             auntDoubleAttack.interactable = false;
-            SoundManager.Instance.PlayOnShot("Button");
-
+            SoundManager.Instance.PlayOneShot("Button");
+            ShowAuntItemInfo(auntPowerThrow.image.sprite);
         }
     }
 
@@ -471,8 +476,8 @@ public class GameUIManager : Singleton<GameUIManager>
             PlayerManager player = GameManager.Instance.RichPig.GetComponent<PlayerManager>();
             player.curBullet = GameManager.Instance.PowerThrowBullet;
             DisableInteractiveButtonAfterUsePowerThrow_Pig();
-            SoundManager.Instance.PlayOnShot("Button");
-
+            SoundManager.Instance.PlayOneShot("Button");
+            ShowPigItemInfo(pigPowerThrow.GetComponent<Button>().image.sprite);
         }
     }
 
@@ -513,6 +518,28 @@ public class GameUIManager : Singleton<GameUIManager>
 
     #endregion
 
+    public void ShowAuntItemInfo(Sprite sprite)
+    {
+        auntUseItemInfo.gameObject.SetActive(true);
+        auntUseItemImage.sprite = sprite;
+    }
+
+    public void HideAuntItemInfo()
+    {
+        auntUseItemInfo.gameObject.SetActive(false);
+    }
+
+    public void ShowPigItemInfo(Sprite sprite)
+    {
+        pigUseItemInfo.gameObject.SetActive(true);
+        pigUseItemImage.sprite = sprite;
+    }
+
+    public void HidePigItemInfo()
+    {
+        pigUseItemInfo.gameObject.SetActive(false);
+    }
+
     void Setting()
     {
         if (isSettingOpen)
@@ -524,7 +551,7 @@ public class GameUIManager : Singleton<GameUIManager>
             Scale(settingBorder, Vector3.one, 0.25f);
         }
         isSettingOpen = !isSettingOpen;
-        SoundManager.Instance.PlayOnShot("Button");
+        SoundManager.Instance.PlayOneShot("Button");
 
     }
 

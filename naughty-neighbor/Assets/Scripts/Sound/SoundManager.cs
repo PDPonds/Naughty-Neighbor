@@ -46,7 +46,7 @@ public class SoundManager : Singleton<SoundManager>
         if (s.source.isPlaying) s.source.Pause();
     }
 
-    public void PlayOnShot(string name)
+    public void PlayOneShot(string name)
     {
         Sound s = Array.Find(sounds, x => x.name == name);
         if (s == null) return;

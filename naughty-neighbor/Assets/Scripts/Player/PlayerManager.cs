@@ -147,6 +147,8 @@ public class PlayerManager : MonoBehaviour
             bullet.OnSetupBullet(target, Target.Pig, isDoubleAttack);
         else if (GameManager.Instance.IsGameState(GameState.RichPig))
             bullet.OnSetupBullet(target, Target.Aunt, isDoubleAttack);
+
+        SoundManager.Instance.PlayOneShot("Throw");
     }
 
     #region Player State

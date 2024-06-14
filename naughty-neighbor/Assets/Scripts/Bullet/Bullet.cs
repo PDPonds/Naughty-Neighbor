@@ -60,6 +60,7 @@ public class Bullet : MonoBehaviour
             {
                 if (auntPlayer.isHurt()) auntPlayer.Anim_Play("Happy UnFriendly");
                 else auntPlayer.Anim_Play("Happy Friendly");
+                SoundManager.Instance.PlayOneShot("AuntDodge");
             }
             else
             {
@@ -73,6 +74,7 @@ public class Bullet : MonoBehaviour
                     if (pigPlayer.isHurt()) pigPlayer.Anim_Play("Happy UnFriendly");
                     else pigPlayer.Anim_Play("Happy Friendly");
                 }
+                SoundManager.Instance.PlayOneShot("PigDodge");
             }
         }
 

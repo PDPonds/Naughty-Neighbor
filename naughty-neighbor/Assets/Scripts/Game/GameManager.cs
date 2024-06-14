@@ -133,6 +133,7 @@ public class GameManager : Singleton<GameManager>
                 auntPlayer.curBullet = auntPlayer.normalBulletPrefab;
 
                 DestroyAllBulletInScene();
+                GameUIManager.Instance.HidePigItemInfo();
 
                 break;
             case GameState.RichPig:
@@ -161,6 +162,7 @@ public class GameManager : Singleton<GameManager>
                 }
 
                 DestroyAllBulletInScene();
+                GameUIManager.Instance.HideAuntItemInfo();
 
                 break;
             case GameState.WaitingForNextTurn:

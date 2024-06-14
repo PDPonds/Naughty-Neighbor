@@ -12,7 +12,7 @@ public class InputSystem : MonoBehaviour
         {
             input = new PlayerInput();
 
-            input.Player.Press.performed += i => StartHold();
+            input.Player.Press.started += i => StartHold();
             input.Player.Press.canceled += i => StopHold();
 
         }
@@ -28,6 +28,7 @@ public class InputSystem : MonoBehaviour
             player.isHold = true;
             player.isDecreaseDis = false;
             GameUIManager.Instance.ShowAttackRate();
+            SoundManager.Instance.PlayOneShot("Pull");
         }
     }
 

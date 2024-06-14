@@ -85,7 +85,7 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
         Scale(howToPlayButton.gameObject, Vector3.one, 0.5f);
         Scale(startGameButton.gameObject, Vector3.one, 0.5f);
         Scale(userParent, Vector3.one, 0.5f);
-        SoundManager.Instance.PlayOnShot("Button");
+        SoundManager.Instance.PlayOneShot("Button");
 
     }
     #endregion
@@ -96,7 +96,7 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
     {
         howToPlayPage.SetActive(true);
         Scale(howToPlayBorder, Vector3.one, 0.5f);
-        SoundManager.Instance.PlayOnShot("Button");
+        SoundManager.Instance.PlayOneShot("Button");
 
     }
 
@@ -104,7 +104,7 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
     {
         selectModePage.SetActive(true);
         Scale(selectModeBorder, Vector3.one, 0.5f);
-        SoundManager.Instance.PlayOnShot("Button");
+        SoundManager.Instance.PlayOneShot("Button");
 
     }
 
@@ -114,7 +114,7 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
 
     void CloseHowToPlay()
     {
-        SoundManager.Instance.PlayOnShot("Button");
+        SoundManager.Instance.PlayOneShot("Button");
 
         Scale(howToPlayBorder, Vector3.zero, 0.5f, () =>
         {
@@ -128,7 +128,7 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
 
     void CloseSelectMode()
     {
-        SoundManager.Instance.PlayOnShot("Button");
+        SoundManager.Instance.PlayOneShot("Button");
 
         Scale(selectModeBorder, Vector3.zero, 0.5f, () =>
         {
@@ -140,13 +140,13 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
     {
         selectDifficultyPage.SetActive(true);
         Scale(selectDifficultyBorder, Vector3.one, 0.5f);
-        SoundManager.Instance.PlayOnShot("Button");
+        SoundManager.Instance.PlayOneShot("Button");
     }
 
     void SelectMultiPlayer()
     {
         GameManager.SwitchGameMode(GameMode.MultiPlayer);
-        SoundManager.Instance.PlayOnShot("Button");
+        SoundManager.Instance.PlayOneShot("Button");
         SceneManager.LoadScene(1);
     }
 
@@ -154,7 +154,7 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
     {
         GameManager.SwitchGameMode(GameMode.SinglePlayer);
         GameManager.SwitchGameDifficulty(GameDifficulty.Easy);
-        SoundManager.Instance.PlayOnShot("Button");
+        SoundManager.Instance.PlayOneShot("Button");
         SceneManager.LoadScene(1);
     }
 
@@ -162,7 +162,7 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
     {
         GameManager.SwitchGameMode(GameMode.SinglePlayer);
         GameManager.SwitchGameDifficulty(GameDifficulty.Normal);
-        SoundManager.Instance.PlayOnShot("Button");
+        SoundManager.Instance.PlayOneShot("Button");
         SceneManager.LoadScene(1);
     }
 
@@ -170,13 +170,13 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
     {
         GameManager.SwitchGameMode(GameMode.SinglePlayer);
         GameManager.SwitchGameDifficulty(GameDifficulty.Hard);
-        SoundManager.Instance.PlayOnShot("Button");
+        SoundManager.Instance.PlayOneShot("Button");
         SceneManager.LoadScene(1);
     }
 
     void CloseSelectDifficulty()
     {
-        SoundManager.Instance.PlayOnShot("Button");
+        SoundManager.Instance.PlayOneShot("Button");
         Scale(selectDifficultyBorder, Vector3.zero, 0.5f, () =>
         {
             selectDifficultyPage.SetActive(false);
@@ -196,7 +196,7 @@ public class MainMenuUIManager : Singleton<MainMenuUIManager>
             Scale(settingBorder, Vector3.one, 0.25f);
         }
         isSettingOpen = !isSettingOpen;
-        SoundManager.Instance.PlayOnShot("Button");
+        SoundManager.Instance.PlayOneShot("Button");
     }
 
     void Scale(GameObject go, Vector3 scale, float time)
