@@ -18,10 +18,13 @@ public class ShareToSocial : MonoBehaviour
         tx.Apply();
 
         string path = Path.Combine(Application.temporaryCachePath, "sharedImage.png");
+        File.WriteAllBytes(path, tx.EncodeToPNG());
         Destroy(tx);
 
-        new NativeShare().AddFile(path).SetSubject("This is my score.")
-            .SetText("share your score with your friend.")
+        new NativeShare()
+            .AddFile(path)
+            //.SetSubject("This is my score.")
+            //.SetText("share your score with your friend.")
             .Share();
     }
 
