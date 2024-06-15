@@ -141,21 +141,13 @@ public class PlayerManager : MonoBehaviour
         Vector3 target = Vector3.zero;
         if (GameManager.Instance.IsGameState(GameState.RichPig))
         {
-            target = transform.position + new Vector3(curDis * GameManager.Instance.curWindForce, 0, 0);
+            target = transform.position + new Vector3(curDis + GameManager.Instance.curWindForce, 0, 0);
 
         }
         else if (GameManager.Instance.IsGameState(GameState.AuntNextDoor))
         {
-            float wind = 0;
-            if (GameManager.Instance.isRightWind())
-            {
-                wind = GameManager.Instance.curWindForce + 1;
-            }
-            else
-            {
-                wind = GameManager.Instance.curWindForce - 1;
-            }
-            target = transform.position - new Vector3(curDis * wind, 0, 0);
+
+            target = transform.position - new Vector3(curDis - GameManager.Instance.curWindForce, 0, 0);
         }
         if (GameManager.Instance.IsGameState(GameState.AuntNextDoor))
             bullet.OnSetupBullet(target, Target.Pig, isDoubleAttack);

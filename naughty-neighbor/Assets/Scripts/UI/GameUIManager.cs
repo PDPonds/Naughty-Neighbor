@@ -283,11 +283,11 @@ public class GameUIManager : Singleton<GameUIManager>
         leftWindArrow.SetActive(false);
         rightWindArrow.SetActive(false);
 
-        if (windForce > 1)
+        if (windForce > 0)
         {
             rightWindArrow.SetActive(true);
         }
-        else if (windForce < 1)
+        else if (windForce < 0)
         {
             leftWindArrow.SetActive(true);
         }
@@ -299,7 +299,7 @@ public class GameUIManager : Singleton<GameUIManager>
         float min = Mathf.Abs(GameManager.gameData.MinWindForce);
         float max = Mathf.Abs(GameManager.gameData.MaxWindForce);
         float windRange = min + max;
-        float curWindRange = windForce > 1 ? windForce + min : windForce - min;
+        float curWindRange = windForce + min;
         float percent = (curWindRange / windRange) * 100f;
 
         float posX = ((180f * percent) / 100f) - 90f;
