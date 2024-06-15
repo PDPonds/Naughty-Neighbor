@@ -65,9 +65,16 @@ public class GameUIManager : Singleton<GameUIManager>
     [SerializeField] Button settingButton;
     bool isSettingOpen;
 
+    ShareToSocial share;
+
     private void OnEnable()
     {
         GameManager.Instance.OnSetupWindForce += UpdateWindArrow;
+    }
+
+    private void Awake()
+    {
+        share = GetComponent<ShareToSocial>();
     }
 
     private void Start()
@@ -366,7 +373,7 @@ public class GameUIManager : Singleton<GameUIManager>
     void Share()
     {
         SoundManager.Instance.PlayOneShot("Button");
-
+        share.ShareScore();
     }
 
     void Home()
