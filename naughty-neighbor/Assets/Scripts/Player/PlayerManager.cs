@@ -142,7 +142,6 @@ public class PlayerManager : MonoBehaviour
         if (GameManager.Instance.IsGameState(GameState.RichPig))
         {
             target = transform.position + new Vector3(curDis * GameManager.Instance.curWindForce, 0, 0);
-            Debug.Log(target);
 
         }
         else if (GameManager.Instance.IsGameState(GameState.AuntNextDoor))
@@ -157,7 +156,6 @@ public class PlayerManager : MonoBehaviour
                 wind = GameManager.Instance.curWindForce - 1;
             }
             target = transform.position - new Vector3(curDis * wind, 0, 0);
-            Debug.Log(target);
         }
         if (GameManager.Instance.IsGameState(GameState.AuntNextDoor))
             bullet.OnSetupBullet(target, Target.Pig, isDoubleAttack);
