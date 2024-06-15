@@ -331,6 +331,11 @@ public class GameManager : Singleton<GameManager>
         else return false;
     }
 
+    public bool isRightWind()
+    {
+        return curWindForce < 1;
+    }
+
     #endregion
 
 }
