@@ -59,7 +59,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     #region Status
-    void SetupHP()
+    public void SetupHP()
     {
         curHP = GameManager.gameData.PlayerHP;
         UpdateHPInfo();

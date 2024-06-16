@@ -122,6 +122,9 @@ public class GameManager : Singleton<GameManager>
                 GameUIManager.Instance.EnableInteractiveAuntItem();
                 if (IsGameMode(GameMode.MultiPlayer))
                 {
+                    PlayerManager pigPlayer = RichPig.GetComponent<PlayerManager>();
+                    pigPlayer.SetupHP();
+
                     EnablePlayerManagerOnGameObject(RichPig, false);
                     EnablePlayerManagerOnGameObject(AuntNextDoor, true);
                 }
@@ -144,7 +147,6 @@ public class GameManager : Singleton<GameManager>
                 {
                     EnablePlayerManagerOnGameObject(RichPig, true);
                     EnablePlayerManagerOnGameObject(AuntNextDoor, false);
-
                     PlayerManager pigPlayer = RichPig.GetComponent<PlayerManager>();
                     pigPlayer.SetupOnPhaseStart();
                     pigPlayer.curDis = 0;

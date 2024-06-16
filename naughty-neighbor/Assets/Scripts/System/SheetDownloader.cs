@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -9,7 +10,7 @@ public class SheetDownloader : MonoBehaviour
     const string sheetId = "12KB8eV75NC_4-saBfeA8Sw4qZHBDGo1wKuXJjTUgj0Q";
     const string url = "https://docs.google.com/spreadsheets/d/" + sheetId + "/export?format=csv";
 
-    private void Awake()
+    public void OnEnable()
     {
         StartCoroutine(DownloadData());
     }
